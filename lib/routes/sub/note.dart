@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/note.dart';
+import '../../models/note.dart';
 
 class Note extends StatelessWidget {
   String title = "";
@@ -97,9 +97,9 @@ class Note extends StatelessWidget {
                     var notes = context.read<NoteModel>();
                     notes.add(
                       NoteStructure(
-                        id: note.items.length,
+                        id: notes.noteNumberCount,
                         title: title.isEmpty ? 'Note #${note.nullNoteCount + 1}' : title,
-                        content: content,
+                        content: "\t" + content,
                         isTitleEmpty: title.isEmpty
                       ),
                     );

@@ -12,18 +12,15 @@ class MainRouter extends StatelessWidget {
     return DefaultTabController(
         length: 3,
         child: Scaffold(
-          body: ListView(children: [
-            SizedBox(
-              height: size.height * 0.85,
+          body: SizedBox(
+              height: size.height * 1,
               child: TabBarView(
                 children: [
                   Home(),
                   Search(),
                   Settings(),
                 ],
-              )
-            )
-          ]),
+              )),
           bottomNavigationBar: Material(
               color: Colors.yellowAccent[700],
               borderRadius: const BorderRadius.only(
