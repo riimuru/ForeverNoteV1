@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter_svg/svg.dart';
-import '../widgets/search_bar.dart';
 import '../routes/sub/view_note.dart';
 
 import 'sub/note.dart';
@@ -16,98 +16,187 @@ class Home extends StatefulWidget {
 }
 
 class _Home extends State<Home> {
+  final TextEditingController _controller = TextEditingController();
 
   String dire = '/';
+  String imp = '';
 
-  Widget _noteBuilder(String str, BuildContext context){
+  Widget _noteBuilder(String str, String str2, BuildContext context) {
     var note = context.watch<NoteModel>();
     return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: note.items.length,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) { 
-                    if(str == '/'){
-                    return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListTile(
-                      title: Text(note.items[index].title),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+        shrinkWrap: true,
+        itemCount: note.items.length,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          print(str2);
+          if (str == '/') {
+            if (str2.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  title: Text(note.items[index].title),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ViewNote(note.items[index]))),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(
+                        splashRadius: 20.0,
+                        onPressed: () => note.removeNote(note.items[index]),
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
                       ),
-                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ViewNote(note.items[index]))),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          IconButton(
-                            splashRadius: 20.0,
-                            onPressed: () => note.removeNote(note.items[index]),
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ),
+                      IconButton(
+                          splashRadius: 20.0,
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.cloud,
+                            color: Colors.blue[700],
+                          )),
+                    ],
+                  ),
+                  tileColor: Colors.amber,
+                ),
+              );
+            } else if (note.items[index].title.contains(str2)) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  title: Text(note.items[index].title),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ViewNote(note.items[index]))),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(
+                        splashRadius: 20.0,
+                        onPressed: () => note.removeNote(note.items[index]),
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                      ),
+                      IconButton(
+                          splashRadius: 20.0,
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.cloud,
+                            color: Colors.blue[700],
+                          )),
+                    ],
+                  ),
+                  tileColor: Colors.amber,
+                ),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          } else {
+            if (note.items[index].directory == dire) {
+              if (str2.isEmpty) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    title: Text(note.items[index].title),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewNote(note.items[index]))),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton(
+                          splashRadius: 20.0,
+                          onPressed: () => note.removeNote(note.items[index]),
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
                           ),
-                          IconButton(
+                        ),
+                        IconButton(
                             splashRadius: 20.0,
                             onPressed: () {},
                             icon: Icon(
                               Icons.cloud,
                               color: Colors.blue[700],
-                            )
-                          ),
-                        ],
-                      ),
-                      tileColor: Colors.amber,
+                            )),
+                      ],
                     ),
-                  );
-                    }
-                    else{
-                      if(note.items[index].directory == dire){
-                        return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListTile(
-                      title: Text(note.items[index].title),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ViewNote(note.items[index]))),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          IconButton(
-                            splashRadius: 20.0,
-                            onPressed: () => note.removeNote(note.items[index]),
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ),
-                          ),
-                          IconButton(
-                            splashRadius: 20.0,
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.cloud,
-                              color: Colors.blue[700],
-                            )
-                          ),
-                        ],
-                      ),
-                      tileColor: Colors.amber,
-                    ),
-                  );
-                  
-                      }else{
-                        return const SizedBox.shrink();
-                      }
-                    }
-                  }
+                    tileColor: Colors.amber,
+                  ),
                 );
+              } else if (note.items[index].title.contains(str2)) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    title: Text(note.items[index].title),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewNote(note.items[index]))),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton(
+                          splashRadius: 20.0,
+                          onPressed: () => note.removeNote(note.items[index]),
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                        ),
+                        IconButton(
+                            splashRadius: 20.0,
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.cloud,
+                              color: Colors.blue[700],
+                            )),
+                      ],
+                    ),
+                    tileColor: Colors.amber,
+                  ),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            } else {
+              return const SizedBox.shrink();
+            }
+          }
+        });
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    double dynSize = size.height * 0.75;
+    _controller.addListener(() {
+      setState(() {
+        imp = _controller.text;
+        //dynSize = size.height * 0.30;
+      });
+    });
     var note = context.watch<NoteModel>();
     var directory = context.watch<DirectoryModel>();
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Column(children: [
         Container(
@@ -119,7 +208,7 @@ class _Home extends State<Home> {
                   bottomRight: Radius.circular(20))),
         ),
         SizedBox(
-          height: size.height * 0.75,
+          height: dynSize,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,7 +225,7 @@ class _Home extends State<Home> {
                 //   shrinkWrap: true,
                 //   itemCount: note.items.length,
                 //   physics: const NeverScrollableScrollPhysics(),
-                //   itemBuilder: (context, index) { 
+                //   itemBuilder: (context, index) {
                 //     return Padding(
                 //     padding: const EdgeInsets.all(8.0),
                 //     child: ListTile(
@@ -172,10 +261,9 @@ class _Home extends State<Home> {
                 //   }
                 // ),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(25.0, 10.0, 10.0, 10.0),
-                  child: Text(dire, style: const TextStyle(fontSize: 35.0))
-                ),
-                _noteBuilder(dire, context)
+                    padding: const EdgeInsets.fromLTRB(25.0, 10.0, 10.0, 10.0),
+                    child: Text(dire, style: const TextStyle(fontSize: 35.0))),
+                _noteBuilder(dire, imp, context)
               ],
             ),
           ),
@@ -221,61 +309,58 @@ class _Home extends State<Home> {
         //     )
         //   ],
         // ),
-        child: Column(
-        children: [
+        child: Column(children: [
           SizedBox(
-              height: size.height * 0.16,
-              width: size.width,
-              child: DrawerHeader(
-                margin: const EdgeInsets.only(bottom: 8.0),
-                padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 5.0),
-                decoration: BoxDecoration(
-                  color: Colors.yellowAccent[700],
-                ),
-                child: const Text(
-                  'Directories',
-                  style: TextStyle(fontSize: 20),
-                ),
+            height: size.height * 0.16,
+            width: size.width,
+            child: DrawerHeader(
+              margin: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 5.0),
+              decoration: BoxDecoration(
+                color: Colors.yellowAccent[700],
+              ),
+              child: const Text(
+                'Directories',
+                style: TextStyle(fontSize: 20),
               ),
             ),
-          ListView.builder(
-          itemCount: directory.directories.length,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) => Container(
-            padding: const EdgeInsets.all(2),
-            child: ListTile(
-              //TODO add open and close feature
-              leading: const Icon(Icons.folder),
-              title: Text(directory.directories[index].name),
-              onTap: () {
-                setState(() {
-                  dire = directory.directories[index].name;
-                });
-                Navigator.pop(context);
-              },
-              trailing: IconButton(
-                splashRadius: 20.0,
-                onPressed: () { 
-                  if(directory.directories[index].name != '/'){
-                    return directory.removeDir(directory.directories[index]);
-                  }
-                },
-                icon: directory.directories[index].name != '/' ? const Icon(Icons.delete, color: Colors.red) : const Icon(null),
-              )
-            ),
           ),
+          ListView.builder(
+            itemCount: directory.directories.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) => Container(
+              padding: const EdgeInsets.all(2),
+              child: ListTile(
+                  //TODO add open and close feature
+                  leading: const Icon(Icons.folder),
+                  title: Text(directory.directories[index].name),
+                  onTap: () {
+                    setState(() {
+                      dire = directory.directories[index].name;
+                    });
+                    Navigator.pop(context);
+                  },
+                  trailing: IconButton(
+                    splashRadius: 20.0,
+                    onPressed: () {
+                      if (directory.directories[index].name != '/') {
+                        return directory
+                            .removeDir(directory.directories[index]);
+                      }
+                    },
+                    icon: directory.directories[index].name != '/'
+                        ? const Icon(Icons.delete, color: Colors.red)
+                        : const Icon(null),
+                  )),
+            ),
           ),
           FloatingActionButton(
               heroTag: "add_directory",
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DirectoryWig())
-              ),
-              child: const Icon(Icons.add)
-            )
-        ]
-        ),
+              onPressed: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => DirectoryWig())),
+              child: const Icon(Icons.add))
+        ]),
       ),
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
@@ -286,7 +371,22 @@ class _Home extends State<Home> {
                   icon: SvgPicture.asset('assets/images/menu.svg'),
                   onPressed: () => Scaffold.of(_).openDrawer(),
                 )),
-        actions: const <Widget>[SearchBar()],
+        actions: <Widget>[
+          Container(
+              padding: const EdgeInsets.fromLTRB(0, 5, 10, 0),
+              child: AnimSearchBar(
+                width: 300,
+                textController: _controller,
+                onSuffixTap: () {
+                  setState(() {
+                    _controller.clear();
+                  });
+                },
+                closeSearchOnSuffixTap: true,
+                suffixIcon: const Icon(Icons.cancel),
+                prefixIcon: const Icon(Icons.search),
+              ))
+        ],
       ),
 
       // Navigator.push(

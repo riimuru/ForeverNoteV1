@@ -8,17 +8,16 @@ class CheckBox extends StatefulWidget {
   State<CheckBox> createState() => _CheckBox();
 }
 
-class _CheckBox extends State<CheckBox>{
+class _CheckBox extends State<CheckBox> {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Checkbox(
-      checkColor: Colors.blue,
-      value: widget.checked,
-      onChanged: (bool? value){
-        setState(() {
-          widget.checked = value;
+        checkColor: Colors.blue,
+        value: widget.checked,
+        onChanged: (bool? value) {
+          setState(() {
+            widget.checked = value;
+          });
         });
-      }
-    );
   }
 }

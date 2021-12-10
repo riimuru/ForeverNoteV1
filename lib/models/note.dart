@@ -26,7 +26,9 @@ class NoteModel extends ChangeNotifier {
   int get itemsCount => _notes.length;
 
   int noteIdByTitle(String title) {
-    return _notes.elementAt(_notes.indexWhere((element) => element.title == title)).id;
+    return _notes
+        .elementAt(_notes.indexWhere((element) => element.title == title))
+        .id;
   }
 
   void add(NoteStructure note) {
@@ -38,7 +40,7 @@ class NoteModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void modify(NoteStructure note){
+  void modify(NoteStructure note) {
     removeNote(note);
     _notes.add(note);
     notifyListeners();

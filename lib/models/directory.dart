@@ -7,11 +7,13 @@ class DirectoryModel extends ChangeNotifier {
   late Directories _directory;
   var nullDirCounter = 0;
 
-  final List<DirectoryStructure> _directories = [DirectoryStructure(id: 1, name: '/', isNameEmpty: false)];
+  final List<DirectoryStructure> _directories = [
+    DirectoryStructure(id: 1, name: '/', isNameEmpty: false)
+  ];
 
   Directories get directory => _directory;
 
-  set directory(Directories dir){
+  set directory(Directories dir) {
     _directory = dir;
     notifyListeners();
   }
@@ -20,7 +22,7 @@ class DirectoryModel extends ChangeNotifier {
 
   List<DirectoryStructure> get directories => [..._directories];
 
-  void add(DirectoryStructure dir){
+  void add(DirectoryStructure dir) {
     _directories.add(dir);
     if (dir.isNameEmpty) {
       nullDirCounter++;
@@ -28,22 +30,23 @@ class DirectoryModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeDir(DirectoryStructure dir){
+  void removeDir(DirectoryStructure dir) {
     _directories.removeWhere((element) => element.id == dir.id);
     notifyListeners();
   }
-
 }
 
 class Directories {
-  static List<DirectoryStructure> directories = [DirectoryStructure(id: 1, name: '/', isNameEmpty: false)];
+  static List<DirectoryStructure> directories = [
+    DirectoryStructure(id: 1, name: '/', isNameEmpty: false)
+  ];
 
   DirectoryStructure getById(int id) => DirectoryStructure(
-    id: id,
-    name: directories[id % directories.length].name,
-    files: directories[id % directories.length].files,
-    isNameEmpty: directories[id % directories.length].isNameEmpty,
-  );
+        id: id,
+        name: directories[id % directories.length].name,
+        files: directories[id % directories.length].files,
+        isNameEmpty: directories[id % directories.length].isNameEmpty,
+      );
 
   DirectoryStructure getByPosition(int position) {
     return getById(position);
@@ -57,16 +60,16 @@ class DirectoryStructure {
   final List<NoteStructure>? files;
   final bool isNameEmpty;
 
-  DirectoryStructure({
-    required this.id,
-    required this.name,
-    this.files,
-    required this.isNameEmpty
-  });
+  DirectoryStructure(
+      {required this.id,
+      required this.name,
+      this.files,
+      required this.isNameEmpty});
 
   @override
   int get hashCode => id;
 
   @override
-  bool operator ==(Object other) => other is DirectoryStructure && other.id == id;
+  bool operator ==(Object other) =>
+      other is DirectoryStructure && other.id == id;
 }
