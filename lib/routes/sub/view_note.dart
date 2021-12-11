@@ -3,16 +3,46 @@ import '../../models/note.dart';
 import '../../models/directory.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'dart:math';
+import 'package:flutter_tex/flutter_tex.dart';
+
 
 class ViewNote extends StatelessWidget {
   final NoteStructure _v;
   final Database? database;
   const ViewNote(this._v, this.database);
+  Widget bodyC() {
+    if(_v.type == 'note'){
+      print("is note !!!!!!!");
+      return SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 30.0),
+              physics: const NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              child: Text(_v.content,
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                      inherit: false,
+                      color: Colors.black,
+                      //TODO Change the font
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400)),
+            );
+    }
+    else{
+      return SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 30.0),
+        physics: const NeverScrollableScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        child: TeXView(
+          child: TeXViewDocument(_v.content)
+        )
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     var note = context.watch<NoteModel>();
     var directory = context.watch<DirectoryModel>();
+
     return Scaffold(
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Colors.black),
@@ -100,6 +130,7 @@ class ViewNote extends StatelessWidget {
                                   content: _v.content,
                                   isTitleEmpty: false,
                                   directory: directory.directories[index].name,
+                                  type: _v.type,
                                 ));
                                 final snackBar = SnackBar(
                                   content: Text(
@@ -141,19 +172,20 @@ class ViewNote extends StatelessWidget {
                   endIndent: 10.0,
                 )),
             //TODO Make the view in such a way that the title remains on top and content scrolls.
-            SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 30.0),
-              physics: const NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              child: Text(_v.content,
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                      inherit: false,
-                      color: Colors.black,
-                      //TODO Change the font
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400)),
-            )
+            //   SingleChildScrollView(
+            //   padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 30.0),
+            //   physics: const NeverScrollableScrollPhysics(),
+            //   scrollDirection: Axis.vertical,
+            //   child: Text(_v.content,
+            //       textAlign: TextAlign.left,
+            //       style: const TextStyle(
+            //           inherit: false,
+            //           color: Colors.black,
+            //           //TODO Change the font
+            //           fontSize: 18,
+            //           fontWeight: FontWeight.w400)),
+            // )
+            bodyC()
           ],
         )));
   }

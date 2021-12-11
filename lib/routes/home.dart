@@ -34,9 +34,9 @@ class _Home extends State<Home> {
         join(await getDatabasesPath(), 'note_database.db'),
         onCreate: (db, version) async {
           await db.execute(
-              'CREATE TABLE IF NOT EXISTS notes(id INTEGER PRIMERY KEY, title TEXT, content TEXT, isTitleEmpty INTEGER, directory TEXT)');
+              'CREATE TABLE notes (id INTEGER PRIMERY KEY, title TEXT, content TEXT, isTitleEmpty INTEGER, directory TEXT, type TEXT)');
         },
-        version: 1,
+        version: 2,
       );
     }
 
@@ -50,13 +50,16 @@ class _Home extends State<Home> {
     Future<List<NoteStructure>> getDatabase() async {
       final List<Map<String, dynamic>> map =
           await database.rawQuery('SELECT * FROM notes');
+
       return List.generate(map.length, (i) {
         return NoteStructure(
             id: map[i]['id'],
             title: map[i]['title'],
             content: map[i]['content'],
             directory: map[i]['directory'],
-            isTitleEmpty: map[i]['isTitleEmpty'] == 1 ? true : false);
+            isTitleEmpty: map[i]['isTitleEmpty'] == 1 ? true : false,
+            type: map[i]['type'],
+            );
       });
     }
 
@@ -91,7 +94,7 @@ class _Home extends State<Home> {
                           MaterialPageRoute(
                               builder: (context) => Note(
                                   noteStruct: note.items[index],
-                                  database: database)),
+                                  database: database, type: 'latex')),
                         ),
                         icon: const Icon(
                           Icons.edit_outlined,
@@ -148,7 +151,7 @@ class _Home extends State<Home> {
                           MaterialPageRoute(
                               builder: (context) => Note(
                                   noteStruct: note.items[index],
-                                  database: database)),
+                                  database: database, type: 'note')),
                         ),
                         icon: const Icon(
                           Icons.edit_outlined,
@@ -210,7 +213,7 @@ class _Home extends State<Home> {
                             MaterialPageRoute(
                                 builder: (context) => Note(
                                     noteStruct: note.items[index],
-                                    database: database)),
+                                    database: database, type: 'note')),
                           ),
                           icon: const Icon(
                             Icons.edit_outlined,
@@ -267,7 +270,7 @@ class _Home extends State<Home> {
                             MaterialPageRoute(
                                 builder: (context) => Note(
                                     noteStruct: note.items[index],
-                                    database: database)),
+                                    database: database, type: 'note')),
                           ),
                           icon: const Icon(
                             Icons.edit_outlined,
@@ -630,7 +633,7 @@ class _Home extends State<Home> {
       //         context, MaterialPageRoute(builder: (context) => Note())
       floatingActionButton: GestureDetector(
         onLongPress: () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => Note(database: database))),
+            MaterialPageRoute(builder: (context) => Note(database: database, type: 'note'))),
         child: ExpandableFab(
           distance: 200.0,
           children: [
@@ -642,14 +645,14 @@ class _Home extends State<Home> {
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Note(database: database))),
+                      builder: (context) => Note(database: database, type: 'note'))),
               icon: const Icon(Icons.note_add),
             ),
             ActionButton(
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Note(database: database))),
+                      builder: (context) => Note(database: database, type: 'latex'))),
               icon: const Icon(Icons.calculate),
             ),
           ],

@@ -21,7 +21,9 @@ void main() async {
       providers: [
         Provider(create: (context) => Notes()),
         ChangeNotifierProxyProvider<Notes, NoteModel>(
-          create: (context) => NoteModel(),
+          create: (context) {
+            return NoteModel();
+          },
           update: (context, note, item) {
             if (item == null) throw ArgumentError.notNull('item');
             item.note = note;
@@ -30,7 +32,9 @@ void main() async {
         ),
         Provider(create: (context) => Directories()),
         ChangeNotifierProxyProvider<Directories, DirectoryModel>(
-          create: (context) => DirectoryModel(),
+          create: (context) {  
+            return DirectoryModel();
+          },
           update: (context, directory, dir) {
             if (dir == null) throw ArgumentError.notNull('item');
             dir.directory = directory;
