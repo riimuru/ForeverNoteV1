@@ -6,15 +6,16 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../routes/downloads.dart';
-import '../routes/history.dart';
+import 'browser/downloads.dart';
+import 'browser/history.dart';
 import '../utils/constants.dart';
 import '../widgets/certificate_popup.dart';
 import '../models/history.dart';
 import '../provider/browser_provider.dart';
 import '../widgets/download_popup.dart';
-import '../services/database_helper.dart';
 import '../models/downloads.dart';
+import './browser/source.dart';
+import './browser/logs.dart';
 
 class Search extends StatefulWidget {
   String historyUrl = "";
@@ -53,6 +54,8 @@ class _SearchState extends State<Search> {
   X509Certificate? x509certificate;
   bool? canGoBack = false;
   bool? canGoForward = false;
+  String? source;
+  List<String> logs = [];
 
   @override
   void initState() {
@@ -81,7 +84,7 @@ class _SearchState extends State<Search> {
         builder: (context) => CertificatePopUp(certificate, Uri.parse(url)));
   }
 
-  selectedItem(context, item) {
+  selectedItem(context, item) async {
     switch (item) {
       case 1:
         Navigator.push(context,
@@ -90,6 +93,25 @@ class _SearchState extends State<Search> {
       case 2:
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => const HistoryS()));
+        break;
+      case 4:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Source(
+              _webViewController,
+              Uri.parse(url),
+            ),
+          ),
+        );
+        break;
+      case 5:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Logs(logs),
+          ),
+        );
         break;
     }
   }
@@ -324,6 +346,24 @@ class _SearchState extends State<Search> {
                   ),
                 ),
               ),
+              const PopupMenuItem<int>(
+                value: 4,
+                child: Text(
+                  "View page source",
+                  style: TextStyle(
+                    fontSize: 16.5,
+                  ),
+                ),
+              ),
+              const PopupMenuItem<int>(
+                value: 5,
+                child: Text(
+                  "View console logs",
+                  style: TextStyle(
+                    fontSize: 16.5,
+                  ),
+                ),
+              ),
             ],
             onSelected: (item) => selectedItem(context, item),
           ),
@@ -390,10 +430,9 @@ class _SearchState extends State<Search> {
                 await initArrows();
               },
               onConsoleMessage: (controller, consoleMessage) {
-                print(consoleMessage);
+                logs.add(consoleMessage.message);
               },
               onDownloadStart: (controller, url) async {
-                //TODO: download using webview
                 FlutterDownloader.registerCallback(TestClass.callback);
                 var directory = await getExternalStorageDirectory();
 

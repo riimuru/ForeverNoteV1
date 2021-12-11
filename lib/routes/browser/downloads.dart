@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/downloads.dart';
-import '../routes/search.dart';
-import '../services/database_helper.dart';
-import '../utils/constants.dart';
-import '../widgets/warning_popup1.dart';
+import '../../models/downloads.dart';
+import '../search.dart';
+import '../../services/database_helper.dart';
+import '../../utils/constants.dart';
+import '../../widgets/warning_popup1.dart';
 
 class Downloads extends StatefulWidget {
   const Downloads({Key? key}) : super(key: key);

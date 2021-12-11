@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/history.dart';
-import '../utils/constants.dart';
-import '../services/database_helper.dart';
-import '../routes/search.dart';
-import '../widgets/warning_popup.dart';
+import '../../models/history.dart';
+import '../../utils/constants.dart';
+import '../../services/database_helper.dart';
+import '../search.dart';
+import '../../widgets/warning_popup.dart';
 
 class HistoryS extends StatefulWidget {
   const HistoryS({Key? key}) : super(key: key);
