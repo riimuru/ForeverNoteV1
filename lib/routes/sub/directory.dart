@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/directory.dart';
 import '../../models/note.dart';
+import 'package:sqflite/sqflite.dart';
+import 'dart:math';
 
 class DirectoryWig extends StatelessWidget {
   String name = '';
+  final Database database;
+  DirectoryWig(this.database);
 
   @override
   Widget build(BuildContext context) {
@@ -54,21 +58,26 @@ class DirectoryWig extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(0),
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   var directories = context.read<DirectoryModel>();
                   if (name == "/") {
-                    final snackBar = SnackBar(
+                    const snackBar = SnackBar(
                       content: Text("Can't make two root directories"),
                       duration: Duration(seconds: 3),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   } else {
+                    var randNum = Random().nextInt(100000);
+                    await database.transaction((txn) async {
+                      await txn.rawInsert(
+                        "INSERT INTO directories (id, name, isNameEmpty) VALUES (?, ?, ?)", 
+                        [randNum, name.isEmpty ? 'Directory #${directory.nullDirCount + 1}' : name, name.isEmpty ]
+                      );
+                    });
                     directories.add(
                       DirectoryStructure(
-                        id: directory.directories.length,
-                        name: name.isEmpty
-                            ? 'Directory #${directory.nullDirCount + 1}'
-                            : name,
+                        id: randNum,
+                        name: name.isEmpty ? 'Directory #${directory.nullDirCount + 1}' : name,
                         isNameEmpty: name.isEmpty,
                       ),
                     );

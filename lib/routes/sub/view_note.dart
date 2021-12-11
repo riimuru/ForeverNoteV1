@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import '../../models/note.dart';
 import '../../models/directory.dart';
 import 'package:provider/provider.dart';
+import 'package:sqflite/sqflite.dart';
 import 'dart:math';
 
 class ViewNote extends StatelessWidget {
   final NoteStructure _v;
-  const ViewNote(this._v);
+  final Database? database;
+  const ViewNote(this._v, this.database);
   @override
   Widget build(BuildContext context) {
     var note = context.watch<NoteModel>();
@@ -52,7 +54,7 @@ class ViewNote extends StatelessWidget {
                                         Radius.circular(10.0))),
                                 child: Text(directory.directories[index].name)),
                           ),
-                          onTap: () {
+                          onTap: () async {
                             if (directory.directories[index].name == '/') {
                               const snackBar = SnackBar(
                                   content: Text(
@@ -64,13 +66,19 @@ class ViewNote extends StatelessWidget {
                               var notes = context.read<NoteModel>();
                               if (_v.directory ==
                                   directory.directories[index].name) {
-                                note.modify(NoteStructure(
-                                  id: notes.noteIdByTitle(_v.title),
-                                  title: _v.title,
-                                  content: _v.content,
-                                  isTitleEmpty: false,
-                                  directory: '/',
-                                ));
+                                //     await database!.transaction((txn) async {
+                                //       await txn.rawUpdate(
+                                //       'UPDATE notes SET directory = ?, WHERE id = ?',
+                                //       [,_v.id]
+                                //       );
+                                //     });
+                                // note.modify(NoteStructure(
+                                //   id: _v.id,
+                                //   title: _v.title,
+                                //   content: _v.content,
+                                //   isTitleEmpty: false,
+                                //   //directory: '/',
+                                // ));
                                 final snackBar = SnackBar(
                                   content: Text(
                                       "${_v.title} was removed from the ${directory.directories[index].name} directory"),
@@ -80,8 +88,14 @@ class ViewNote extends StatelessWidget {
                                     .showSnackBar(snackBar);
                                 Navigator.pop(context);
                               } else {
+                                    await database!.transaction((txn) async {
+                                      await txn.rawUpdate(
+                                      'UPDATE notes SET directory = ? WHERE id = ?',
+                                      [directory.directories[index].name, _v.id]
+                                      );
+                                    });
                                 note.modify(NoteStructure(
-                                  id: notes.noteIdByTitle(_v.title),
+                                  id: _v.id,
                                   title: _v.title,
                                   content: _v.content,
                                   isTitleEmpty: false,
