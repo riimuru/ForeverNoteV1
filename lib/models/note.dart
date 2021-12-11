@@ -37,6 +37,11 @@ class NoteModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // void addList(List<NoteStructure> noteL) {
+  //   _notes.addAll(noteL.toList());
+  //   notifyListeners();
+  // }
+
   void modify(NoteStructure note) {
     removeNote(note);
     _notes.add(note);
@@ -51,17 +56,6 @@ class NoteModel extends ChangeNotifier {
 
 class Notes {
   static List<NoteStructure> notes = [];
-
-  NoteStructure getById(int id) => NoteStructure(
-      id: id,
-      title: notes[id % notes.length].title,
-      content: notes[id % notes.length].content,
-      isTitleEmpty: notes[id % notes.length].isTitleEmpty,
-      directory: notes[id % notes.length].directory);
-
-  NoteStructure getByPosition(int position) {
-    return getById(position);
-  }
 }
 
 class NoteStructure {

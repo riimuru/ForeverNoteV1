@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../routes/downloads.dart';
 import '../routes/history.dart';
@@ -11,16 +12,23 @@ import '../utils/constants.dart';
 import '../widgets/certificate_popup.dart';
 import '../models/history.dart';
 import '../provider/browser_provider.dart';
-import '../widgets/download.popup.dart';
+import '../widgets/download_popup.dart';
+import '../services/database_helper.dart';
+import '../models/downloads.dart';
 
 class Search extends StatefulWidget {
+  String historyUrl = "";
+  Search({this.historyUrl = ""});
   @override
-  _SearchState createState() => new _SearchState();
+  _SearchState createState() => _SearchState(this.historyUrl);
 }
 
 class _SearchState extends State<Search> {
   InAppWebViewController? _webViewController;
   final TextEditingController _controller = TextEditingController();
+  String historyUrl = "";
+
+  _SearchState(this.historyUrl);
 
   InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
     crossPlatform: InAppWebViewOptions(
@@ -37,8 +45,10 @@ class _SearchState extends State<Search> {
   );
 
   String url = Constant.DEFAULT_URL;
+  int count = 0;
   String? favicon;
   double progress = 0;
+  String? searchedVal;
   SslCertificate? certificate;
   X509Certificate? x509certificate;
   bool? canGoBack = false;
@@ -68,7 +78,7 @@ class _SearchState extends State<Search> {
     certificate = ssl;
     showDialog(
         context: context,
-        builder: (context) => CertificatePopUp(ssl, Uri.parse(url)));
+        builder: (context) => CertificatePopUp(certificate, Uri.parse(url)));
   }
 
   selectedItem(context, item) {
@@ -96,7 +106,10 @@ class _SearchState extends State<Search> {
     BrowserProvider browserProvider = Provider.of<BrowserProvider>(context);
 
     getFavicon();
-    var history = context.watch<HistoryModel>();
+
+    HistoryModel history = context.watch<HistoryModel>();
+    DownloadModel download = context.watch<DownloadModel>();
+
     if (_webViewController != null && browserProvider.isDesktopMode) {
       _webViewController?.evaluateJavascript(
         source: Constant.enableDesktopModeJs,
@@ -106,6 +119,12 @@ class _SearchState extends State<Search> {
         source: Constant.desableDesktopModeJs,
       );
     }
+    // TEMPORARY FIX
+    if (count <= 1) {
+      url = (historyUrl.isEmpty) ? Constant.DEFAULT_URL : historyUrl;
+    }
+    count++;
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
@@ -141,9 +160,13 @@ class _SearchState extends State<Search> {
                   var url = Uri.parse(val);
                   if (url.scheme.isEmpty) {
                     this.url = Constant.DEFAULT_URL + val;
+                    searchedVal = val;
                   }
                   _webViewController?.loadUrl(
-                      urlRequest: URLRequest(url: Uri.parse(this.url)));
+                    urlRequest: URLRequest(
+                      url: Uri.parse(this.url),
+                    ),
+                  );
                 },
                 style: const TextStyle(
                   color: Colors.black,
@@ -288,7 +311,12 @@ class _SearchState extends State<Search> {
                       ),
                     ),
                     value: browserProvider.isDesktopMode,
-                    onChanged: (newVal) {
+                    onChanged: (newVal) async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+
+                      prefs.setBool(
+                          "isDesktopMode", !browserProvider.isDesktopMode);
                       Provider.of<BrowserProvider>(context, listen: false)
                           .toggleMode(browserProvider.isDesktopMode);
                       Navigator.pop(context);
@@ -320,6 +348,7 @@ class _SearchState extends State<Search> {
                   this.url = url.toString();
                   _controller.text = this.url;
                 });
+                await initArrows();
               },
               androidOnPermissionRequest:
                   (controller, origin, resources) async {
@@ -332,17 +361,20 @@ class _SearchState extends State<Search> {
                 setState(() {
                   this.url = url.toString();
                   _controller.text = this.url;
-                  initArrows();
                 });
                 var histories = context.read<HistoryModel>();
-                histories.add(
-                  HistoryStructure(
-                    id: history.items.length,
-                    favicon: favicon!,
-                    host: Uri.parse(this.url).host,
-                    url: this.url,
-                  ),
+                var item = HistoryStructure(
+                  id: history.items.length,
+                  favicon: favicon!,
+                  host: Uri.parse(this.url).host,
+                  url: this.url,
+                  timeStamp: DateTime(DateTime.now().year, DateTime.now().month,
+                          DateTime.now().day)
+                      .toString()
+                      .split(" ")[0],
                 );
+                histories.add(item);
+                await initArrows();
               },
               onProgressChanged: (controller, progress) async {
                 setState(() {
@@ -355,27 +387,30 @@ class _SearchState extends State<Search> {
                   this.url = url.toString();
                   _controller.text = this.url;
                 });
+                await initArrows();
               },
               onConsoleMessage: (controller, consoleMessage) {
                 print(consoleMessage);
               },
               onDownloadStart: (controller, url) async {
                 //TODO: download using webview
-                print(url.data?.parameters.toString());
-                // FlutterDownloader.registerCallback(TestClass.callback);
-                // var directory = await getExternalStorageDirectory();
+                FlutterDownloader.registerCallback(TestClass.callback);
+                var directory = await getExternalStorageDirectory();
+
+                final taskId = await FlutterDownloader.enqueue(
+                  url: url.toString(),
+                  savedDir: directory!.path,
+                );
+
+                final taskDetails =
+                    await FlutterDownloader.loadTasksWithRawQuery(
+                        query: "SELECT * FROM task WHERE task_id='$taskId'");
 
                 showDialog(
-                    context: context,
-                    builder: (context) => const DownloadPopUp());
-                // final taskId = await FlutterDownloader.enqueue(
-                //   url: url.toString(),
-                //   savedDir: directory!.path,
-                //   showNotification:
-                //       true, // show download progress in status bar (for Android)
-                //   openFileFromNotification:
-                //       true, // click on notification to open downloaded file (for Android)
-                // );
+                  context: context,
+                  builder: (context) => DownloadPopUp(download.items.length,
+                      taskDetails![0], favicon, download, context),
+                );
               },
             ),
           ),
@@ -386,5 +421,7 @@ class _SearchState extends State<Search> {
 }
 
 class TestClass {
-  static void callback(String id, DownloadTaskStatus status, int progress) {}
+  static void callback(String id, DownloadTaskStatus status, int progress) {
+    print(progress);
+  }
 }
