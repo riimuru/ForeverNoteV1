@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:forever_note/services/database_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter_svg/svg.dart';
-import '../routes/sub/view_note.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -11,6 +11,7 @@ import 'sub/directory.dart';
 import '../widgets/expandable_button.dart';
 import '../../models/note.dart';
 import '../../models/directory.dart';
+import '../routes/sub/view_note.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -39,9 +40,8 @@ class _Home extends State<Home> {
         version: 2,
       );
     }
-
     Future<Database> instDatabase() async {
-      database = await startDatabase();
+      database = await DatabaseHelper.db.startDatabase();
       return database;
     }
 
@@ -62,8 +62,9 @@ class _Home extends State<Home> {
             );
       });
     }
+    // this line was causing error
+    // note.itemsL = await getDatabase();
 
-    note.itemsL = await getDatabase();
     return ListView.builder(
         shrinkWrap: true,
         itemCount: note.items.length,
@@ -368,10 +369,9 @@ class _Home extends State<Home> {
               onPressed: () async {
                 if (directory.directories[index].name != '/') {
                   await database.transaction((txn) async {
-                            await txn.rawDelete(
-                                'DELETE FROM notes WHERE id = ?',
-                                [directory.directories[index].id]);
-                          });
+                    await txn.rawDelete('DELETE FROM notes WHERE id = ?',
+                        [directory.directories[index].id]);
+                  });
                   return directory.removeDir(directory.directories[index]);
                 }
               },
@@ -597,8 +597,10 @@ class _Home extends State<Home> {
               }),
           FloatingActionButton(
               heroTag: "add_directory",
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => DirectoryWig(database2))),
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DirectoryWig(database2))),
               child: const Icon(Icons.add))
         ]),
       ),

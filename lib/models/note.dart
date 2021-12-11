@@ -83,7 +83,6 @@ class NoteModel extends ChangeNotifier {
     // print(result);
     notifyListeners();
   }
-
   void modify(NoteStructure note) async {
     removeNote(note);
     notes.add(note);
