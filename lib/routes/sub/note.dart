@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/note.dart';
+import '../../models/note.dart';
 
 class Note extends StatelessWidget {
   String title = "";
@@ -94,16 +94,17 @@ class Note extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(305, 20, 0, 0),
               child: ElevatedButton(
                 onPressed: () {
-                    var notes = context.read<NoteModel>();
-                    notes.add(
-                      NoteStructure(
-                        id: note.items.length,
-                        title: title.isEmpty ? 'Note #${note.nullNoteCount + 1}' : title,
-                        content: content,
-                        isTitleEmpty: title.isEmpty
-                      ),
-                    );
-                    Navigator.pop(context);
+                  var notes = context.read<NoteModel>();
+                  notes.add(
+                    NoteStructure(
+                        id: notes.noteNumberCount,
+                        title: title.isEmpty
+                            ? 'Note #${note.nullNoteCount + 1}'
+                            : title,
+                        content: "\t" + content,
+                        isTitleEmpty: title.isEmpty),
+                  );
+                  Navigator.pop(context);
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.resolveWith<Color>(

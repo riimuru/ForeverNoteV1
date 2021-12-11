@@ -7,6 +7,7 @@ import 'main_router.dart';
 import './models/note.dart';
 import './models/history.dart';
 import './provider/browser_provider.dart';
+import './models/directory.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +26,15 @@ void main() async {
             if (item == null) throw ArgumentError.notNull('item');
             item.note = note;
             return item;
+          },
+        ),
+        Provider(create: (context) => Directories()),
+        ChangeNotifierProxyProvider<Directories, DirectoryModel>(
+          create: (context) => DirectoryModel(),
+          update: (context, directory, dir) {
+            if (dir == null) throw ArgumentError.notNull('item');
+            dir.directory = directory;
+            return dir;
           },
         ),
         Provider(create: (context) => History()),

@@ -5,6 +5,7 @@ class NoteModel extends ChangeNotifier {
 
   final List<NoteStructure> _notes = [];
   var nullNoteCounter = 0;
+  var noteNumber = 0;
 
   Notes get note => _note;
 
@@ -17,13 +18,28 @@ class NoteModel extends ChangeNotifier {
 
   int get nullNoteCount => nullNoteCounter;
 
+  int get noteNumberCount => noteNumber;
+
   int get itemsCount => _notes.length;
+
+  int noteIdByTitle(String title) {
+    return _notes
+        .elementAt(_notes.indexWhere((element) => element.title == title))
+        .id;
+  }
 
   void add(NoteStructure note) {
     _notes.add(note);
     if (note.isTitleEmpty) {
       nullNoteCounter++;
     }
+    noteNumber++;
+    notifyListeners();
+  }
+
+  void modify(NoteStructure note) {
+    removeNote(note);
+    _notes.add(note);
     notifyListeners();
   }
 
@@ -40,7 +56,8 @@ class Notes {
       id: id,
       title: notes[id % notes.length].title,
       content: notes[id % notes.length].content,
-      isTitleEmpty: notes[id % notes.length].isTitleEmpty);
+      isTitleEmpty: notes[id % notes.length].isTitleEmpty,
+      directory: notes[id % notes.length].directory);
 
   NoteStructure getByPosition(int position) {
     return getById(position);
@@ -52,12 +69,14 @@ class NoteStructure {
   final String title;
   final String content;
   final bool isTitleEmpty;
+  final String? directory;
 
   NoteStructure({
     required this.id,
     required this.title,
     required this.content,
     required this.isTitleEmpty,
+    this.directory,
   });
 
   @override
