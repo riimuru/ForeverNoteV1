@@ -9,7 +9,8 @@ import '../../models/note.dart';
 class Note extends StatelessWidget {
   final NoteStructure? noteStruct;
   final Database? database;
-  Note({this.noteStruct, this.database});
+  final String type;
+  Note({this.noteStruct, this.database, required this.type});
   String title = "";
   String content = "";
 
@@ -118,7 +119,9 @@ class Note extends StatelessWidget {
                             ? 'Note #${note.nullNoteCount + 1}'
                             : title,
                         content: "\t" + content,
-                        isTitleEmpty: title.isEmpty),
+                        isTitleEmpty: title.isEmpty,
+                        type: type,
+                        ),
                   );
                   }else{
                     var checkTitle = title.isEmpty ? noteStruct!.title : title;
@@ -133,7 +136,8 @@ class Note extends StatelessWidget {
                         id: noteStruct!.id, 
                         title: checkTitle, 
                         content: content.isEmpty ? noteStruct!.content : content, 
-                        isTitleEmpty: title.isEmpty
+                        isTitleEmpty: title.isEmpty,
+                        type: noteStruct!.type
                       )
                     );
                   }

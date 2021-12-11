@@ -7,7 +7,7 @@ class DirectoryModel extends ChangeNotifier {
   late Directories _directory;
   var nullDirCounter = 0;
 
-  final List<DirectoryStructure> _directories = [
+  List<DirectoryStructure> _directories = [
     DirectoryStructure(id: 1, name: '/', isNameEmpty: false)
   ];
 
@@ -21,6 +21,8 @@ class DirectoryModel extends ChangeNotifier {
   int get nullDirCount => nullDirCounter;
 
   List<DirectoryStructure> get directories => [..._directories];
+
+  set directoriesL(List<DirectoryStructure> l) => _directories += l;
 
   void add(DirectoryStructure dir) {
     _directories.add(dir);
