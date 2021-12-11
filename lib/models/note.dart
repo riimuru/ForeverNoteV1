@@ -1,7 +1,4 @@
-import 'dart:collection';
-
 import 'package:flutter/cupertino.dart';
-import 'package:forever_note/routes/note.dart';
 
 class NoteModel extends ChangeNotifier {
   late Notes _note;
@@ -24,7 +21,7 @@ class NoteModel extends ChangeNotifier {
 
   void add(NoteStructure note) {
     _notes.add(note);
-    if(note.isTitleEmpty){
+    if (note.isTitleEmpty) {
       nullNoteCounter++;
     }
     notifyListeners();
@@ -43,8 +40,7 @@ class Notes {
       id: id,
       title: notes[id % notes.length].title,
       content: notes[id % notes.length].content,
-      isTitleEmpty: notes[id % notes.length].isTitleEmpty
-      );
+      isTitleEmpty: notes[id % notes.length].isTitleEmpty);
 
   NoteStructure getByPosition(int position) {
     return getById(position);

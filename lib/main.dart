@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'main_router.dart';
 import './models/note.dart';
+import './models/history.dart';
+import './provider/browser_provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(
+      debug: true // set false to disable printing logs to console
+      );
+  await Permission.storage.request();
+
   runApp(
-  MultiProvider(
+    MultiProvider(
       providers: [
         Provider(create: (context) => Notes()),
         ChangeNotifierProxyProvider<Notes, NoteModel>(
@@ -17,9 +27,22 @@ void main() {
             return item;
           },
         ),
+        Provider(create: (context) => History()),
+        ChangeNotifierProxyProvider<History, HistoryModel>(
+          create: (context) => HistoryModel(),
+          update: (context, history, item) {
+            if (item == null) throw ArgumentError.notNull('item');
+            item.note = history;
+            return item;
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (context) =>
+              BrowserProvider(false), // TODO: add local storage
+        )
       ],
-      child: const App()
-  )
+      child: const App(),
+    ),
   );
 }
 
@@ -27,7 +50,7 @@ class App extends StatelessWidget {
   const App();
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Forever Note',

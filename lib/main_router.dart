@@ -14,15 +14,14 @@ class MainRouter extends StatelessWidget {
         child: Scaffold(
           body: ListView(children: [
             SizedBox(
-              height: size.height * 0.85,
-              child: TabBarView(
-                children: [
-                  Home(),
-                  Search(),
-                  Settings(),
-                ],
-              )
-            )
+                height: size.height * 0.85,
+                child: TabBarView(
+                  children: [
+                    Home(),
+                    Search(),
+                    Settings(),
+                  ],
+                ))
           ]),
           bottomNavigationBar: Material(
               color: Colors.yellowAccent[700],
