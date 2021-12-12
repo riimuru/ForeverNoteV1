@@ -126,7 +126,7 @@ class _HistorySState extends State<HistoryS> {
                                           backgroundColor:
                                               Theme.of(context).primaryColor,
                                           content: Text(
-                                            "Added to loud storage.",
+                                            "Added to cloud storage.",
                                             style: TextStyle(
                                               color: Theme.of(context)
                                                   .scaffoldBackgroundColor,

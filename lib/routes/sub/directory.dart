@@ -17,12 +17,11 @@ class DirectoryWig extends StatelessWidget {
     var note = context.watch<NoteModel>();
     return Scaffold(
         appBar: AppBar(
-          iconTheme: const IconThemeData(color: Colors.black),
           backgroundColor: const Color(0x00000000),
           elevation: 0,
-          title: const Text(
+          title: Text(
             "Add Directory",
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Theme.of(context).primaryColor),
           ),
         ),
         body: SingleChildScrollView(
@@ -32,22 +31,24 @@ class DirectoryWig extends StatelessWidget {
             Container(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: TextField(
+                  style: TextStyle(color: Theme.of(context).primaryColor),
                   maxLength: 20,
                   onChanged: (value) {
                     name = value;
                   },
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: 'Directory Name',
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                    border: OutlineInputBorder(
+                    hintStyle: TextStyle(color: Theme.of(context).primaryColor),
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 20.0),
+                    border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(15.0)),
                     ),
-                    enabledBorder: OutlineInputBorder(
+                    enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.red, width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(15.0)),
                     ),
-                    focusedBorder: OutlineInputBorder(
+                    focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.red, width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(15.0)),
                     ),
@@ -70,14 +71,21 @@ class DirectoryWig extends StatelessWidget {
                     var randNum = Random().nextInt(100000);
                     await database.transaction((txn) async {
                       await txn.rawInsert(
-                        "INSERT INTO directories (id, name, isNameEmpty) VALUES (?, ?, ?)", 
-                        [randNum, name.isEmpty ? 'Directory #${directory.nullDirCount + 1}' : name, name.isEmpty ]
-                      );
+                          "INSERT INTO directories (id, name, isNameEmpty) VALUES (?, ?, ?)",
+                          [
+                            randNum,
+                            name.isEmpty
+                                ? 'Directory #${directory.nullDirCount + 1}'
+                                : name,
+                            name.isEmpty
+                          ]);
                     });
                     directories.add(
                       DirectoryStructure(
                         id: randNum,
-                        name: name.isEmpty ? 'Directory #${directory.nullDirCount + 1}' : name,
+                        name: name.isEmpty
+                            ? 'Directory #${directory.nullDirCount + 1}'
+                            : name,
                         isNameEmpty: name.isEmpty,
                       ),
                     );
