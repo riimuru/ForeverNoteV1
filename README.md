@@ -16,6 +16,7 @@
 [<img src="assets/images/screenshots/Screenshot5_light.png" width=160>](assets/screenshots/Screenshot5_light.png)
 [<img src="assets/images/screenshots/Screenshot6_light.png" width=160>](assets/screenshots/Screenshot6_light.png)
 [<img src="assets/images/screenshots/Screenshot7_light.png" width=160>](assets/screenshots/Screenshot7_light.png)
+[<img src="assets/images/screenshots/Screenshot_Latex.png" width=160>](assets/screenshots/Screenshot_Latex.png)
 
 ## Features
 
