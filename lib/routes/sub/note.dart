@@ -146,13 +146,15 @@ class Note extends StatelessWidget {
                             noteStruct!.id
                           ]);
                     });
-                    notes.modify(NoteStructure(
-                        id: noteStruct!.id,
-                        title: checkTitle,
-                        content:
-                            content.isEmpty ? noteStruct!.content : content,
-                        isTitleEmpty: title.isEmpty,
-                        type: noteStruct!.type));
+                    notes.modify(
+                      NoteStructure(
+                          id: noteStruct!.id,
+                          title: checkTitle,
+                          content:
+                              content.isEmpty ? noteStruct!.content : content,
+                          isTitleEmpty: title.isEmpty,
+                          type: noteStruct!.type),
+                    );
                   }
                   Navigator.pop(context);
                 },

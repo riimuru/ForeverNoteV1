@@ -20,8 +20,10 @@ class _DrawingPageState extends State<DrawingPage> {
   Color selectedColor = Colors.black;
   double selectedWidth = 5.0;
 
-  StreamController<List<DrawnLine>> linesStreamController = StreamController<List<DrawnLine>>.broadcast();
-  StreamController<DrawnLine> currentLineStreamController = StreamController<DrawnLine>.broadcast();
+  StreamController<List<DrawnLine>> linesStreamController =
+      StreamController<List<DrawnLine>>.broadcast();
+  StreamController<DrawnLine> currentLineStreamController =
+      StreamController<DrawnLine>.broadcast();
 
   Future<void> save() async {
     // try {
@@ -66,23 +68,17 @@ class _DrawingPageState extends State<DrawingPage> {
 
   Widget backButton(BuildContext context) {
     return Positioned(
-      top: 80,
-      left: 10,
-      child: ElevatedButton(
-      child: const Icon(Icons.arrow_back),
-      onPressed: () => Navigator.pop(context),
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
-          Colors.red
-        ),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18.0),
-          )
-        )
-      )
-      )
-    );
+        top: 80,
+        left: 10,
+        child: ElevatedButton(
+            child: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context),
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                )))));
   }
 
   Widget buildCurrentPath(BuildContext context) {
@@ -94,7 +90,7 @@ class _DrawingPageState extends State<DrawingPage> {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.all(4.0),
+          padding: const EdgeInsets.all(4.0),
           color: Colors.transparent,
           alignment: Alignment.topLeft,
           child: StreamBuilder<DrawnLine>(
@@ -119,7 +115,7 @@ class _DrawingPageState extends State<DrawingPage> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         color: Colors.transparent,
-        padding: EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(4.0),
         alignment: Alignment.topLeft,
         child: StreamBuilder<List<DrawnLine>>(
           stream: linesStreamController.stream,
@@ -184,7 +180,8 @@ class _DrawingPageState extends State<DrawingPage> {
         child: Container(
           width: strokeWidth * 2,
           height: strokeWidth * 2,
-          decoration: BoxDecoration(color: selectedColor, borderRadius: BorderRadius.circular(50.0)),
+          decoration: BoxDecoration(
+              color: selectedColor, borderRadius: BorderRadius.circular(50.0)),
         ),
       ),
     );
@@ -199,7 +196,7 @@ class _DrawingPageState extends State<DrawingPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           buildClearButton(),
-          Divider(
+          const Divider(
             height: 40.0,
           ),
           buildColorButton(Colors.red),
@@ -249,8 +246,8 @@ class _DrawingPageState extends State<DrawingPage> {
       onTap: clear,
       child: const CircleAvatar(
         child: Icon(
-          Icons.create,
-          size: 20.0,
+          Icons.clear_all,
+          size: 25.0,
           color: Colors.white,
         ),
       ),

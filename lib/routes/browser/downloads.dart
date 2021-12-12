@@ -126,7 +126,7 @@ class _DownloadsState extends State<Downloads> {
                                           backgroundColor:
                                               Theme.of(context).primaryColor,
                                           content: Text(
-                                            "Added to loud storage.",
+                                            "Added to cloud storage.",
                                             style: TextStyle(
                                               color: Theme.of(context)
                                                   .scaffoldBackgroundColor,
