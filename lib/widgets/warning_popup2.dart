@@ -1,24 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:forever_note/models/history.dart';
+import 'package:provider/provider.dart';
+import '../provider/theme_provider.dart';
 
-class WarningPopUp extends StatefulWidget {
+import '../services/database_helper.dart';
+import '../models/downloads.dart';
+import '../models/history.dart';
+import '../models/note.dart';
+
+class WarningPopUp2 extends StatefulWidget {
   String warningInfo;
   BuildContext context;
-  HistoryModel obj;
+  DownloadModel d;
+  NoteModel n;
+  HistoryModel h;
+  DatabaseHelper db;
 
-  WarningPopUp(this.warningInfo, this.context, this.obj);
+  WarningPopUp2(
+      this.context, this.d, this.n, this.h, this.db, this.warningInfo);
 
   @override
-  _WarningPopUpState createState() =>
-      _WarningPopUpState(this.warningInfo, this.context, this.obj);
+  _WarningPopUp2State createState() => _WarningPopUp2State(
+      this.context, this.d, this.n, this.h, this.db, this.warningInfo);
 }
 
-class _WarningPopUpState extends State<WarningPopUp> {
+class _WarningPopUp2State extends State<WarningPopUp2> {
   String warningInfo;
-  BuildContext _;
-  HistoryModel obj;
+  BuildContext context;
+  DownloadModel d;
+  NoteModel n;
+  HistoryModel h;
+  DatabaseHelper db;
 
-  _WarningPopUpState(this.warningInfo, this._, this.obj);
+  _WarningPopUp2State(
+      this.context, this.d, this.n, this.h, this.db, this.warningInfo);
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -80,7 +94,13 @@ class _WarningPopUpState extends State<WarningPopUp> {
               const Padding(padding: EdgeInsets.symmetric(horizontal: 20.0)),
               ElevatedButton(
                 onPressed: () {
-                  obj.removeAll(context);
+                  d.removeAll(context);
+                  n.removeAll(context);
+                  h.removeAll(context);
+
+                  Provider.of<ThemeProvider>(context, listen: false)
+                      .toggleLightTheme();
+
                   Navigator.pop(context);
                 },
                 child: const Text(

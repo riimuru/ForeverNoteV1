@@ -77,7 +77,7 @@ class _WarningPopUp1State extends State<WarningPopUp1> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Padding(padding: EdgeInsets.symmetric(horizontal: 15.0)),
+              const Padding(padding: EdgeInsets.symmetric(horizontal: 20.0)),
               ElevatedButton(
                 onPressed: () {
                   obj.removeAll(context);

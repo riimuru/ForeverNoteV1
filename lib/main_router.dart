@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'routes/home.dart';
 import 'routes/search.dart';
 import 'routes/settings.dart';
-import '../models/light_dark.dart';
+import 'provider/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 class MainRouter extends StatelessWidget {
@@ -14,7 +14,6 @@ class MainRouter extends StatelessWidget {
     return DefaultTabController(
         length: 3,
         child: Scaffold(
-          backgroundColor: context.watch<LightDark>().opiton ? const Color.fromRGBO(255, 253, 237, 1.0) : const Color.fromRGBO(41, 39, 33, 1.0),
           body: SizedBox(
               height: size.height * 1,
               child: TabBarView(

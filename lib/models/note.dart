@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
+import '../services/database_helper.dart';
 
 class NoteModel extends ChangeNotifier {
   late Notes _note;
@@ -13,8 +14,7 @@ class NoteModel extends ChangeNotifier {
       join(await getDatabasesPath(), 'note_database.db'),
       onCreate: (db, version) async {
         await db.execute(
-          'CREATE TABLE IF NOT EXISTS notes(id INTEGER PRIMERY KEY, title TEXT, content TEXT, isTitleEmpty INTEGER, directory TEXT)'
-        );
+            'CREATE TABLE IF NOT EXISTS notes(id INTEGER PRIMERY KEY, title TEXT, content TEXT, isTitleEmpty INTEGER, directory TEXT)');
       },
       version: 1,
     );
@@ -29,9 +29,9 @@ class NoteModel extends ChangeNotifier {
   //   final List<Map<String, dynamic>> map = await database.rawQuery('SELECT * FROM notes');
   //   return List.generate(map.length, (i) {
   //     return NoteStructure(
-  //       id: map[i]['id'], 
-  //       title: map[i]['title'], 
-  //       content: map[i]['content'], 
+  //       id: map[i]['id'],
+  //       title: map[i]['title'],
+  //       content: map[i]['content'],
   //       directory: map[i]['directory'],
   //       isTitleEmpty: map[i]['isTitleEmpty']);
   //   });
@@ -51,7 +51,6 @@ class NoteModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
   List<NoteStructure> get items => [...notes];
 
   set itemsL(List<NoteStructure> l) => [...notes, ...l];
@@ -68,7 +67,7 @@ class NoteModel extends ChangeNotifier {
         .id;
   }
 
-  void add(NoteStructure note)async {
+  void add(NoteStructure note) async {
     notes.add(note);
     if (note.isTitleEmpty) {
       nullNoteCounter++;
@@ -76,13 +75,14 @@ class NoteModel extends ChangeNotifier {
     noteNumber++;
     // var result = await database.transaction((txn) async {
     //   await txn.rawInsert(
-    //     "INSERT INTO notes (id, title, content, isTitleEmpty, directory) VALUES (?, ?, ?, ?, ?)", 
+    //     "INSERT INTO notes (id, title, content, isTitleEmpty, directory) VALUES (?, ?, ?, ?, ?)",
     //     [note.id, note.title, note.content, note.isTitleEmpty ? 1 : 0, note.directory]
     //   );
     // });
     // print(result);
     notifyListeners();
   }
+
   void modify(NoteStructure note) async {
     removeNote(note);
     notes.add(note);
@@ -101,18 +101,24 @@ class NoteModel extends ChangeNotifier {
     // print(result);
     notifyListeners();
   }
+
+  void removeAll(BuildContext context) async {
+    notes.clear();
+    await DatabaseHelper.db.removeAllNotes();
+    notifyListeners();
+  }
 }
 
 class Notes {
   static List<NoteStructure> notes = [];
 
   NoteStructure getById(int id) => NoteStructure(
-      id: id,
-      title: notes[id % notes.length].title,
-      content: notes[id % notes.length].content,
-      isTitleEmpty: notes[id % notes.length].isTitleEmpty,
-      directory: notes[id % notes.length].directory,
-      type: notes[id % notes.length].type,
+        id: id,
+        title: notes[id % notes.length].title,
+        content: notes[id % notes.length].content,
+        isTitleEmpty: notes[id % notes.length].isTitleEmpty,
+        directory: notes[id % notes.length].directory,
+        type: notes[id % notes.length].type,
       );
 
   NoteStructure getByPosition(int position) {

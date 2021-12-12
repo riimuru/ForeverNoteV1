@@ -10,7 +10,9 @@ import './models/history.dart';
 import './provider/browser_provider.dart';
 import './models/directory.dart';
 import './models/downloads.dart';
-import './models/light_dark.dart';
+import 'provider/theme_provider.dart';
+import './utils/constants.dart';
+import './utils/themes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,7 +69,16 @@ void main() async {
                 return item;
               },
             ),
-            ListenableProvider(create: (BuildContext context) => LightDark())
+            ChangeNotifierProvider(create: (context) {
+              String? theme = value.getString(Constant.APP_THEME);
+              return (theme == null ||
+                      theme.isEmpty ||
+                      theme == Constant.SYSTEM_DEFAULT)
+                  ? ThemeProvider(ThemeMode.system)
+                  : ThemeProvider(theme == Constant.DARK
+                      ? ThemeMode.dark
+                      : ThemeMode.light);
+            }),
           ],
           child: const App(),
         ),
@@ -79,10 +90,13 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Forever Note',
-      home: MainRouter(),
+      home: const MainRouter(),
+      themeMode: Provider.of<ThemeProvider>(context).themeMode,
+      theme: Themes.lightTheme,
+      darkTheme: Themes.darkTheme,
     );
   }
 }

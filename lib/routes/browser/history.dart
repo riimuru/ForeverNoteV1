@@ -70,15 +70,20 @@ class _HistorySState extends State<HistoryS> {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: ListTile(
-                              title: Text(list[index].host),
+                              title: Text(
+                                list[index].host,
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
                               subtitle: RichText(
                                 maxLines: 1,
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
                                       text: list[index].url,
-                                      style: const TextStyle(
-                                        color: Colors.black54,
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
                                       ),
                                     ),
                                   ],
@@ -115,7 +120,21 @@ class _HistorySState extends State<HistoryS> {
                                   ),
                                   IconButton(
                                     splashRadius: 20.0,
-                                    onPressed: () => print("TODO"),
+                                    onPressed: () {
+                                      Scaffold.of(context).showSnackBar(
+                                        SnackBar(
+                                          backgroundColor:
+                                              Theme.of(context).primaryColor,
+                                          content: Text(
+                                            "Added to loud storage.",
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .scaffoldBackgroundColor,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                     icon: const Icon(
                                       Icons.cloud,
                                       color: Colors.blue,

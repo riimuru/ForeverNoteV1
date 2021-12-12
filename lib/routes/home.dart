@@ -5,7 +5,7 @@ import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import '../models/light_dark.dart';
+import '../provider/theme_provider.dart';
 
 import 'sub/note.dart';
 import 'sub/directory.dart';
@@ -14,7 +14,6 @@ import '../../models/note.dart';
 import '../../models/directory.dart';
 import '../routes/sub/view_note.dart';
 import './sub/draw.dart';
-
 
 class Home extends StatefulWidget {
   @override
@@ -43,6 +42,7 @@ class _Home extends State<Home> {
         version: 2,
       );
     }
+
     Future<Database> instDatabase() async {
       database = await DatabaseHelper.db.startDatabase();
       return database;
@@ -56,13 +56,13 @@ class _Home extends State<Home> {
 
       return List.generate(map.length, (i) {
         return NoteStructure(
-            id: map[i]['id'],
-            title: map[i]['title'],
-            content: map[i]['content'],
-            directory: map[i]['directory'],
-            isTitleEmpty: map[i]['isTitleEmpty'] == 1 ? true : false,
-            type: map[i]['type'],
-            );
+          id: map[i]['id'],
+          title: map[i]['title'],
+          content: map[i]['content'],
+          directory: map[i]['directory'],
+          isTitleEmpty: map[i]['isTitleEmpty'] == 1 ? true : false,
+          type: map[i]['type'],
+        );
       });
     }
     // this line was causing error
@@ -79,7 +79,8 @@ class _Home extends State<Home> {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListTile(
-                  title: Text(note.items[index].title, style: TextStyle(color: context.watch<LightDark>().opiton ? Colors.black : Colors.white)),
+                  title: Text(note.items[index].title,
+                      style: TextStyle(color: Theme.of(context).primaryColor)),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -98,11 +99,12 @@ class _Home extends State<Home> {
                           MaterialPageRoute(
                               builder: (context) => Note(
                                   noteStruct: note.items[index],
-                                  database: database, type: 'latex')),
+                                  database: database,
+                                  type: 'latex')),
                         ),
                         icon: Icon(
                           Icons.edit_outlined,
-                          color: context.watch<LightDark>().opiton ? Colors.black : Colors.white,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                       IconButton(
@@ -122,7 +124,20 @@ class _Home extends State<Home> {
                       ),
                       IconButton(
                           splashRadius: 20.0,
-                          onPressed: () {},
+                          onPressed: () {
+                            Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: Theme.of(context).primaryColor,
+                                content: Text(
+                                  "Added to loud storage.",
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                           icon: Icon(
                             Icons.cloud,
                             color: Colors.blue[700],
@@ -136,7 +151,8 @@ class _Home extends State<Home> {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListTile(
-                  title: Text(note.items[index].title, style: TextStyle(color: context.watch<LightDark>().opiton ? Colors.black : Colors.white)),
+                  title: Text(note.items[index].title,
+                      style: TextStyle(color: Theme.of(context).primaryColor)),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -155,11 +171,12 @@ class _Home extends State<Home> {
                           MaterialPageRoute(
                               builder: (context) => Note(
                                   noteStruct: note.items[index],
-                                  database: database, type: 'note')),
+                                  database: database,
+                                  type: 'note')),
                         ),
                         icon: Icon(
                           Icons.edit_outlined,
-                          color: context.watch<LightDark>().opiton ? Colors.black : Colors.white,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                       IconButton(
@@ -198,7 +215,9 @@ class _Home extends State<Home> {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListTile(
-                    title: Text(note.items[index].title, style: TextStyle(color: context.watch<LightDark>().opiton ? Colors.black : Colors.white)),
+                    title: Text(note.items[index].title,
+                        style:
+                            TextStyle(color: Theme.of(context).primaryColor)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -217,11 +236,12 @@ class _Home extends State<Home> {
                             MaterialPageRoute(
                                 builder: (context) => Note(
                                     noteStruct: note.items[index],
-                                    database: database, type: 'note')),
+                                    database: database,
+                                    type: 'note')),
                           ),
                           icon: Icon(
                             Icons.edit_outlined,
-                            color: context.watch<LightDark>().opiton ? Colors.black : Colors.white,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ),
                         IconButton(
@@ -255,7 +275,9 @@ class _Home extends State<Home> {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListTile(
-                    title: Text(note.items[index].title, style: TextStyle(color: context.watch<LightDark>().opiton ? Colors.black : Colors.white)),
+                    title: Text(note.items[index].title,
+                        style:
+                            TextStyle(color: Theme.of(context).primaryColor)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -274,11 +296,12 @@ class _Home extends State<Home> {
                             MaterialPageRoute(
                                 builder: (context) => Note(
                                     noteStruct: note.items[index],
-                                    database: database, type: 'note')),
+                                    database: database,
+                                    type: 'note')),
                           ),
                           icon: Icon(
                             Icons.edit_outlined,
-                            color: context.watch<LightDark>().opiton ? Colors.black : Colors.white,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ),
                         IconButton(
@@ -359,8 +382,9 @@ class _Home extends State<Home> {
         padding: const EdgeInsets.all(2),
         child: ListTile(
             //TODO add open and close feature
-            leading: Icon(Icons.folder, color: context.watch<LightDark>().opiton ? Colors.black : Colors.white),
-            title: Text(directory.directories[index].name, style: TextStyle(color: context.watch<LightDark>().opiton ? Colors.black : Colors.white)),
+            leading: Icon(Icons.folder, color: Theme.of(context).primaryColor),
+            title: Text(directory.directories[index].name,
+                style: TextStyle(color: Theme.of(context).primaryColor)),
             onTap: () {
               setState(() {
                 dire = directory.directories[index].name;
@@ -405,7 +429,6 @@ class _Home extends State<Home> {
     var note = context.watch<NoteModel>();
     var directory = context.watch<DirectoryModel>();
     return Scaffold(
-      backgroundColor: context.watch<LightDark>().opiton ? const Color.fromRGBO(255, 253, 237, 1.0) : const Color.fromRGBO(41, 39, 33, 1.0),
       body: Column(children: [
         Container(
           height: size.height * 0.02,
@@ -416,130 +439,133 @@ class _Home extends State<Home> {
                   bottomRight: Radius.circular(20))),
         ),
         ColoredBox(
-          color: context.watch<LightDark>().opiton ? const Color.fromRGBO(255, 253, 237, 1.0) : const Color.fromRGBO(41, 39, 33, 1.0),
-        child: SizedBox(
-          height: dynSize,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Container(
-                //   height: size.height * 0.02,
-                //   decoration: BoxDecoration(
-                //       color: Colors.yellowAccent[700],
-                //       borderRadius: const BorderRadius.only(
-                //           bottomLeft: Radius.circular(20),
-                //           bottomRight: Radius.circular(20))),
-                // ),
-                // ListView.builder(
-                //   shrinkWrap: true,
-                //   itemCount: note.items.length,
-                //   physics: const NeverScrollableScrollPhysics(),
-                //   itemBuilder: (context, index) {
-                //     return Padding(
-                //     padding: const EdgeInsets.all(8.0),
-                //     child: ListTile(
-                //       title: Text(note.items[index].title),
-                //       shape: RoundedRectangleBorder(
-                //         borderRadius: BorderRadius.circular(10.0),
-                //       ),
-                //       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ViewNote(note.items[index]))),
-                //       trailing: Row(
-                //         mainAxisSize: MainAxisSize.min,
-                //         children: <Widget>[
-                //           IconButton(
-                //             splashRadius: 20.0,
-                //             onPressed: () => note.removeNote(note.items[index]),
-                //             icon: const Icon(
-                //               Icons.delete,
-                //               color: Colors.red,
-                //             ),
-                //           ),
-                //           IconButton(
-                //             splashRadius: 20.0,
-                //             onPressed: () {},
-                //             icon: Icon(
-                //               Icons.cloud,
-                //               color: Colors.blue[700],
-                //             )
-                //           ),
-                //         ],
-                //       ),
-                //       tileColor: Colors.amber,
-                //     ),
-                //   );
-                //   }
-                // ),
-                Container(
-                    padding: const EdgeInsets.fromLTRB(25.0, 10.0, 10.0, 10.0),
-                    child: Text(dire, style: TextStyle(fontSize: 35.0, color: context.watch<LightDark>().opiton ? Colors.black : Colors.white))),
-                FutureBuilder(
-                    future: _noteBuilder(dire, imp, context),
-                    builder:
-                        (BuildContext context, AsyncSnapshot<Widget> snapshot) {
-                      Widget child;
-                      if (snapshot.hasData) {
-                        child = Container(child: snapshot.data);
-                      } else if (snapshot.hasError) {
-                        child = const Icon(
-                          Icons.error_outline,
-                          color: Colors.red,
-                          size: 60,
-                        );
-                      } else {
-                        child =
-                            const Center(child: CircularProgressIndicator());
-                      }
-                      return child;
-                    })
-              ],
-            ),
-          ),
-        )
-        )
+            color: Theme.of(context).scaffoldBackgroundColor,
+            child: SizedBox(
+              height: dynSize,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Container(
+                    //   height: size.height * 0.02,
+                    //   decoration: BoxDecoration(
+                    //       color: Colors.yellowAccent[700],
+                    //       borderRadius: const BorderRadius.only(
+                    //           bottomLeft: Radius.circular(20),
+                    //           bottomRight: Radius.circular(20))),
+                    // ),
+                    // ListView.builder(
+                    //   shrinkWrap: true,
+                    //   itemCount: note.items.length,
+                    //   physics: const NeverScrollableScrollPhysics(),
+                    //   itemBuilder: (context, index) {
+                    //     return Padding(
+                    //     padding: const EdgeInsets.all(8.0),
+                    //     child: ListTile(
+                    //       title: Text(note.items[index].title),
+                    //       shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(10.0),
+                    //       ),
+                    //       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ViewNote(note.items[index]))),
+                    //       trailing: Row(
+                    //         mainAxisSize: MainAxisSize.min,
+                    //         children: <Widget>[
+                    //           IconButton(
+                    //             splashRadius: 20.0,
+                    //             onPressed: () => note.removeNote(note.items[index]),
+                    //             icon: const Icon(
+                    //               Icons.delete,
+                    //               color: Colors.red,
+                    //             ),
+                    //           ),
+                    //           IconButton(
+                    //             splashRadius: 20.0,
+                    //             onPressed: () {},
+                    //             icon: Icon(
+                    //               Icons.cloud,
+                    //               color: Colors.blue[700],
+                    //             )
+                    //           ),
+                    //         ],
+                    //       ),
+                    //       tileColor: Colors.amber,
+                    //     ),
+                    //   );
+                    //   }
+                    // ),
+                    Container(
+                        padding:
+                            const EdgeInsets.fromLTRB(25.0, 10.0, 10.0, 10.0),
+                        child: Text(dire,
+                            style: TextStyle(
+                                fontSize: 35.0,
+                                color: Theme.of(context).primaryColor))),
+                    FutureBuilder(
+                        future: _noteBuilder(dire, imp, context),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<Widget> snapshot) {
+                          Widget child;
+                          if (snapshot.hasData) {
+                            child = Container(child: snapshot.data);
+                          } else if (snapshot.hasError) {
+                            child = const Icon(
+                              Icons.error_outline,
+                              color: Colors.red,
+                              size: 60,
+                            );
+                          } else {
+                            child = const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          return child;
+                        })
+                  ],
+                ),
+              ),
+            ))
       ]),
 
       drawer: Drawer(
-        // child: ListView(
-        //   padding: EdgeInsets.zero,
-        //   children: [
-        //     SizedBox(
-        //       height: 115,
-        //       child: DrawerHeader(
-        //         margin: const EdgeInsets.only(bottom: 8.0),
-        //         padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 5.0),
-        //         decoration: BoxDecoration(
-        //           color: Colors.yellowAccent[700],
-        //         ),
-        //         child: const Text(
-        //           'Directories',
-        //           style: TextStyle(fontSize: 20),
-        //         ),
-        //       ),
-        //     ),
-        //     ListTile(
-        //       leading: const Icon(Icons.folder),
-        //       title: const Text('CSC 8000'),
-        //       onTap: () {},
-        //     ),
-        //     ListTile(
-        //       leading: const Icon(Icons.folder),
-        //       title: const Text('MTH 22000'),
-        //       onTap: () {},
-        //     ),
-        //     ListTile(
-        //       leading: const Icon(Icons.folder),
-        //       title: const Text('Lists'),
-        //       onTap: () {},
-        //     ),
-        //     FloatingActionButton(
-        //       onPressed: () {},
-        //       child: const Icon(Icons.add)
-        //     )
-        //   ],
-        // ),
-        child: ColoredBox(
-          color: context.watch<LightDark>().opiton ? const Color.fromRGBO(255, 253, 237, 1.0) : const Color.fromRGBO(41, 39, 33, 1.0),
+          // child: ListView(
+          //   padding: EdgeInsets.zero,
+          //   children: [
+          //     SizedBox(
+          //       height: 115,
+          //       child: DrawerHeader(
+          //         margin: const EdgeInsets.only(bottom: 8.0),
+          //         padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 5.0),
+          //         decoration: BoxDecoration(
+          //           color: Colors.yellowAccent[700],
+          //         ),
+          //         child: const Text(
+          //           'Directories',
+          //           style: TextStyle(fontSize: 20),
+          //         ),
+          //       ),
+          //     ),
+          //     ListTile(
+          //       leading: const Icon(Icons.folder),
+          //       title: const Text('CSC 8000'),
+          //       onTap: () {},
+          //     ),
+          //     ListTile(
+          //       leading: const Icon(Icons.folder),
+          //       title: const Text('MTH 22000'),
+          //       onTap: () {},
+          //     ),
+          //     ListTile(
+          //       leading: const Icon(Icons.folder),
+          //       title: const Text('Lists'),
+          //       onTap: () {},
+          //     ),
+          //     FloatingActionButton(
+          //       onPressed: () {},
+          //       child: const Icon(Icons.add)
+          //     )
+          //   ],
+          // ),
+          child: ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: Column(children: [
           SizedBox(
             height: size.height * 0.16,
@@ -643,8 +669,10 @@ class _Home extends State<Home> {
       // Navigator.push(
       //         context, MaterialPageRoute(builder: (context) => Note())
       floatingActionButton: GestureDetector(
-        onLongPress: () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => Note(database: database, type: 'note'))),
+        onLongPress: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Note(database: database, type: 'note'))),
         child: ExpandableFab(
           distance: 200.0,
           children: [
@@ -652,11 +680,10 @@ class _Home extends State<Home> {
               backgroundColor: Colors.red,
               heroTag: null,
               onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DrawingPage(),
-                )
-              ),
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DrawingPage(),
+                  )),
               child: const Icon(Icons.create),
             ),
             FloatingActionButton(
@@ -665,7 +692,8 @@ class _Home extends State<Home> {
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Note(database: database, type: 'note'))),
+                      builder: (context) =>
+                          Note(database: database, type: 'note'))),
               child: const Icon(Icons.note_add),
             ),
             FloatingActionButton(
@@ -674,7 +702,8 @@ class _Home extends State<Home> {
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Note(database: database, type: 'latex'))),
+                      builder: (context) =>
+                          Note(database: database, type: 'latex'))),
               child: const Icon(Icons.calculate),
             ),
           ],

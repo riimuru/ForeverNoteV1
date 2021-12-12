@@ -17,15 +17,14 @@ class Note extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var note = context.watch<NoteModel>();
-    
+
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black),
         backgroundColor: const Color(0x00000000),
         elevation: 0,
-        title: const Text(
+        title: Text(
           "Edit Note",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Theme.of(context).primaryColor),
         ),
       ),
       body: SingleChildScrollView(
@@ -61,11 +60,15 @@ class Note extends StatelessWidget {
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
               child: Text(
                 "Content",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Theme.of(context).primaryColor),
               ),
             ),
             SizedBox(
@@ -107,15 +110,21 @@ class Note extends StatelessWidget {
                 onPressed: () async {
                   var randNum = Random().nextInt(100000);
                   var notes = context.read<NoteModel>();
-                  if(noteStruct == null){
+                  if (noteStruct == null) {
                     await database!.transaction((txn) async {
                       await txn.rawInsert(
-                        "INSERT INTO notes (id, title, content, isTitleEmpty) VALUES (?, ?, ?, ?)", 
-                        [randNum, title.isEmpty ? 'Note #${note.nullNoteCount + 1}' : title, "\t" + content, title.isEmpty ? 1 : 0]
-                      );
+                          "INSERT INTO notes (id, title, content, isTitleEmpty) VALUES (?, ?, ?, ?)",
+                          [
+                            randNum,
+                            title.isEmpty
+                                ? 'Note #${note.nullNoteCount + 1}'
+                                : title,
+                            "\t" + content,
+                            title.isEmpty ? 1 : 0
+                          ]);
                     });
-                  notes.add(
-                    NoteStructure(
+                    notes.add(
+                      NoteStructure(
                         id: randNum,
                         title: title.isEmpty
                             ? 'Note #${note.nullNoteCount + 1}'
@@ -123,25 +132,27 @@ class Note extends StatelessWidget {
                         content: "\t" + content,
                         isTitleEmpty: title.isEmpty,
                         type: type,
-                        ),
-                  );
-                  }else{
+                      ),
+                    );
+                  } else {
                     var checkTitle = title.isEmpty ? noteStruct!.title : title;
                     await database!.transaction((txn) async {
                       await txn.rawUpdate(
-                        'UPDATE notes SET title = ?, content = ?, isTitleEmpty = ? WHERE id = ?',
-                        [checkTitle, content.isEmpty ? noteStruct!.content : content, checkTitle.isEmpty ? 1 : 0, noteStruct!.id]
-                      );
+                          'UPDATE notes SET title = ?, content = ?, isTitleEmpty = ? WHERE id = ?',
+                          [
+                            checkTitle,
+                            content.isEmpty ? noteStruct!.content : content,
+                            checkTitle.isEmpty ? 1 : 0,
+                            noteStruct!.id
+                          ]);
                     });
-                    notes.modify(
-                      NoteStructure(
-                        id: noteStruct!.id, 
-                        title: checkTitle, 
-                        content: content.isEmpty ? noteStruct!.content : content, 
+                    notes.modify(NoteStructure(
+                        id: noteStruct!.id,
+                        title: checkTitle,
+                        content:
+                            content.isEmpty ? noteStruct!.content : content,
                         isTitleEmpty: title.isEmpty,
-                        type: noteStruct!.type
-                      )
-                    );
+                        type: noteStruct!.type));
                   }
                   Navigator.pop(context);
                 },

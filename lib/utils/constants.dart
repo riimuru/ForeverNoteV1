@@ -6,4 +6,9 @@ class Constant {
       "document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'width=1024px, initial-scale=' + (document.documentElement.clientWidth / 1024));";
   static const String desableDesktopModeJs =
       "document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'width=document.documentElement.clientWidth, initial-scale=' + (1.0));";
+
+  static const String APP_THEME = "Theme";
+  static const String DARK = "Dark";
+  static const String LIGHT = "Light";
+  static const String SYSTEM_DEFAULT = "System default";
 }

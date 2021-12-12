@@ -106,6 +106,11 @@ class DatabaseHelper {
     await db!.rawQuery("DELETE FROM browser_downloads");
   }
 
+  removeAllNotes() async {
+    final db = await database;
+    await db!.rawQuery("DELETE FROM notes");
+  }
+
   removeDownloadAt(int id) async {
     final db = await database;
     await db!.rawQuery("DELETE FROM browser_downloads WHERE id=$id");

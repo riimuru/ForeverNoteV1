@@ -369,91 +369,96 @@ class _SearchState extends State<Search> {
           ),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            child: progress < 1.0
-                ? LinearProgressIndicator(value: progress)
-                : Container(),
-          ),
-          Expanded(
-            child: InAppWebView(
-              initialUrlRequest: URLRequest(url: Uri.parse(url)),
-              initialOptions: options,
-              onWebViewCreated: (InAppWebViewController controller) {
-                _webViewController = controller;
-              },
-              onLoadStart: (InAppWebViewController controller, Uri? url) async {
-                setState(() {
-                  this.url = url.toString();
-                  _controller.text = this.url;
-                });
-                await initArrows();
-              },
-              androidOnPermissionRequest:
-                  (controller, origin, resources) async {
-                return PermissionRequestResponse(
-                  resources: resources,
-                  action: PermissionRequestResponseAction.GRANT,
-                );
-              },
-              onLoadStop: (InAppWebViewController controller, Uri? url) async {
-                setState(() {
-                  this.url = url.toString();
-                  _controller.text = this.url;
-                });
-                var histories = context.read<HistoryModel>();
-                var item = HistoryStructure(
-                  id: history.items.length,
-                  favicon: favicon!,
-                  host: Uri.parse(this.url).host,
-                  url: this.url,
-                  timeStamp: DateTime(DateTime.now().year, DateTime.now().month,
-                          DateTime.now().day)
-                      .toString()
-                      .split(" ")[0],
-                );
-                histories.add(item);
-                await initArrows();
-              },
-              onProgressChanged: (controller, progress) async {
-                setState(() {
-                  this.progress = progress / 100;
-                  _controller.text = url;
-                });
-              },
-              onUpdateVisitedHistory: (controller, url, androidIsReload) async {
-                setState(() {
-                  this.url = url.toString();
-                  _controller.text = this.url;
-                });
-                await initArrows();
-              },
-              onConsoleMessage: (controller, consoleMessage) {
-                logs.add(consoleMessage.message);
-              },
-              onDownloadStart: (controller, url) async {
-                FlutterDownloader.registerCallback(TestClass.callback);
-                var directory = await getExternalStorageDirectory();
-
-                final taskId = await FlutterDownloader.enqueue(
-                  url: url.toString(),
-                  savedDir: directory!.path,
-                );
-
-                final taskDetails =
-                    await FlutterDownloader.loadTasksWithRawQuery(
-                        query: "SELECT * FROM task WHERE task_id='$taskId'");
-
-                showDialog(
-                  context: context,
-                  builder: (context) => DownloadPopUp(download.items.length,
-                      taskDetails![0], favicon, download, context),
-                );
-              },
+      body: Scaffold(
+        body: Column(
+          children: <Widget>[
+            Container(
+              child: progress < 1.0
+                  ? LinearProgressIndicator(value: progress)
+                  : Container(),
             ),
-          ),
-        ],
+            Expanded(
+              child: InAppWebView(
+                initialUrlRequest: URLRequest(url: Uri.parse(url)),
+                initialOptions: options,
+                onWebViewCreated: (InAppWebViewController controller) {
+                  _webViewController = controller;
+                },
+                onLoadStart:
+                    (InAppWebViewController controller, Uri? url) async {
+                  setState(() {
+                    this.url = url.toString();
+                    _controller.text = this.url;
+                  });
+                  await initArrows();
+                },
+                androidOnPermissionRequest:
+                    (controller, origin, resources) async {
+                  return PermissionRequestResponse(
+                    resources: resources,
+                    action: PermissionRequestResponseAction.GRANT,
+                  );
+                },
+                onLoadStop:
+                    (InAppWebViewController controller, Uri? url) async {
+                  setState(() {
+                    this.url = url.toString();
+                    _controller.text = this.url;
+                  });
+                  var histories = context.read<HistoryModel>();
+                  var item = HistoryStructure(
+                    id: history.items.length,
+                    favicon: favicon!,
+                    host: Uri.parse(this.url).host,
+                    url: this.url,
+                    timeStamp: DateTime(DateTime.now().year,
+                            DateTime.now().month, DateTime.now().day)
+                        .toString()
+                        .split(" ")[0],
+                  );
+                  histories.add(item);
+                  await initArrows();
+                },
+                onProgressChanged: (controller, progress) async {
+                  setState(() {
+                    this.progress = progress / 100;
+                    _controller.text = url;
+                  });
+                },
+                onUpdateVisitedHistory:
+                    (controller, url, androidIsReload) async {
+                  setState(() {
+                    this.url = url.toString();
+                    _controller.text = this.url;
+                  });
+                  await initArrows();
+                },
+                onConsoleMessage: (controller, consoleMessage) {
+                  logs.add(consoleMessage.message);
+                },
+                onDownloadStart: (controller, url) async {
+                  FlutterDownloader.registerCallback(TestClass.callback);
+                  var directory = await getExternalStorageDirectory();
+
+                  final taskId = await FlutterDownloader.enqueue(
+                    url: url.toString(),
+                    savedDir: directory!.path,
+                  );
+
+                  final taskDetails =
+                      await FlutterDownloader.loadTasksWithRawQuery(
+                          query: "SELECT * FROM task WHERE task_id='$taskId'");
+
+                  showDialog(
+                    context: context,
+                    builder: (context) => DownloadPopUp(download.items.length,
+                        taskDetails![0], favicon, download, context),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
