@@ -37,7 +37,7 @@ class MainRouter extends StatelessWidget {
                         icon: const Icon(Icons.home, size: 30.0),
                         height: size.height * 0.07),
                     Tab(
-                        icon: const Icon(Icons.star, size: 30.0),
+                        icon: const Icon(Icons.blur_on, size: 30.0),
                         height: size.height * 0.07),
                     Tab(
                         icon: const Icon(Icons.settings, size: 30.0),
