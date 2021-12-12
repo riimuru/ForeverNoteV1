@@ -5,6 +5,7 @@ import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import '../models/light_dark.dart';
 
 import 'sub/note.dart';
 import 'sub/directory.dart';
@@ -78,7 +79,7 @@ class _Home extends State<Home> {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListTile(
-                  title: Text(note.items[index].title),
+                  title: Text(note.items[index].title, style: TextStyle(color: context.watch<LightDark>().opiton ? Colors.black : Colors.white)),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -99,9 +100,9 @@ class _Home extends State<Home> {
                                   noteStruct: note.items[index],
                                   database: database, type: 'latex')),
                         ),
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.edit_outlined,
-                          color: Colors.black,
+                          color: context.watch<LightDark>().opiton ? Colors.black : Colors.white,
                         ),
                       ),
                       IconButton(
@@ -128,14 +129,14 @@ class _Home extends State<Home> {
                           )),
                     ],
                   ),
-                  tileColor: Colors.amber,
+                  tileColor: Colors.yellow,
                 ),
               );
             } else if (note.items[index].title.contains(str2)) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListTile(
-                  title: Text(note.items[index].title),
+                  title: Text(note.items[index].title, style: TextStyle(color: context.watch<LightDark>().opiton ? Colors.black : Colors.white)),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -156,9 +157,9 @@ class _Home extends State<Home> {
                                   noteStruct: note.items[index],
                                   database: database, type: 'note')),
                         ),
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.edit_outlined,
-                          color: Colors.black,
+                          color: context.watch<LightDark>().opiton ? Colors.black : Colors.white,
                         ),
                       ),
                       IconButton(
@@ -197,7 +198,7 @@ class _Home extends State<Home> {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListTile(
-                    title: Text(note.items[index].title),
+                    title: Text(note.items[index].title, style: TextStyle(color: context.watch<LightDark>().opiton ? Colors.black : Colors.white)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -218,9 +219,9 @@ class _Home extends State<Home> {
                                     noteStruct: note.items[index],
                                     database: database, type: 'note')),
                           ),
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.edit_outlined,
-                            color: Colors.black,
+                            color: context.watch<LightDark>().opiton ? Colors.black : Colors.white,
                           ),
                         ),
                         IconButton(
@@ -254,7 +255,7 @@ class _Home extends State<Home> {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListTile(
-                    title: Text(note.items[index].title),
+                    title: Text(note.items[index].title, style: TextStyle(color: context.watch<LightDark>().opiton ? Colors.black : Colors.white)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -275,9 +276,9 @@ class _Home extends State<Home> {
                                     noteStruct: note.items[index],
                                     database: database, type: 'note')),
                           ),
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.edit_outlined,
-                            color: Colors.black,
+                            color: context.watch<LightDark>().opiton ? Colors.black : Colors.white,
                           ),
                         ),
                         IconButton(
@@ -358,8 +359,8 @@ class _Home extends State<Home> {
         padding: const EdgeInsets.all(2),
         child: ListTile(
             //TODO add open and close feature
-            leading: const Icon(Icons.folder),
-            title: Text(directory.directories[index].name),
+            leading: Icon(Icons.folder, color: context.watch<LightDark>().opiton ? Colors.black : Colors.white),
+            title: Text(directory.directories[index].name, style: TextStyle(color: context.watch<LightDark>().opiton ? Colors.black : Colors.white)),
             onTap: () {
               setState(() {
                 dire = directory.directories[index].name;
@@ -404,6 +405,7 @@ class _Home extends State<Home> {
     var note = context.watch<NoteModel>();
     var directory = context.watch<DirectoryModel>();
     return Scaffold(
+      backgroundColor: context.watch<LightDark>().opiton ? const Color.fromRGBO(255, 253, 237, 1.0) : const Color.fromRGBO(41, 39, 33, 1.0),
       body: Column(children: [
         Container(
           height: size.height * 0.02,
@@ -413,7 +415,9 @@ class _Home extends State<Home> {
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20))),
         ),
-        SizedBox(
+        ColoredBox(
+          color: context.watch<LightDark>().opiton ? const Color.fromRGBO(255, 253, 237, 1.0) : const Color.fromRGBO(41, 39, 33, 1.0),
+        child: SizedBox(
           height: dynSize,
           child: SingleChildScrollView(
             child: Column(
@@ -468,7 +472,7 @@ class _Home extends State<Home> {
                 // ),
                 Container(
                     padding: const EdgeInsets.fromLTRB(25.0, 10.0, 10.0, 10.0),
-                    child: Text(dire, style: const TextStyle(fontSize: 35.0))),
+                    child: Text(dire, style: TextStyle(fontSize: 35.0, color: context.watch<LightDark>().opiton ? Colors.black : Colors.white))),
                 FutureBuilder(
                     future: _noteBuilder(dire, imp, context),
                     builder:
@@ -491,6 +495,7 @@ class _Home extends State<Home> {
               ],
             ),
           ),
+        )
         )
       ]),
 
@@ -533,6 +538,8 @@ class _Home extends State<Home> {
         //     )
         //   ],
         // ),
+        child: ColoredBox(
+          color: context.watch<LightDark>().opiton ? const Color.fromRGBO(255, 253, 237, 1.0) : const Color.fromRGBO(41, 39, 33, 1.0),
         child: Column(children: [
           SizedBox(
             height: size.height * 0.16,
@@ -605,7 +612,7 @@ class _Home extends State<Home> {
                       builder: (context) => DirectoryWig(database2))),
               child: const Icon(Icons.add))
         ]),
-      ),
+      )),
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
         backgroundColor: Colors.yellowAccent[700],

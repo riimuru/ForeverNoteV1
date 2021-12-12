@@ -10,6 +10,7 @@ import './models/history.dart';
 import './provider/browser_provider.dart';
 import './models/directory.dart';
 import './models/downloads.dart';
+import './models/light_dark.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,6 +67,7 @@ void main() async {
                 return item;
               },
             ),
+            ListenableProvider(create: (BuildContext context) => LightDark())
           ],
           child: const App(),
         ),
