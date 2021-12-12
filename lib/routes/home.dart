@@ -12,6 +12,8 @@ import '../widgets/expandable_button.dart';
 import '../../models/note.dart';
 import '../../models/directory.dart';
 import '../routes/sub/view_note.dart';
+import './sub/draw.dart';
+
 
 class Home extends StatefulWidget {
   @override
@@ -639,23 +641,34 @@ class _Home extends State<Home> {
         child: ExpandableFab(
           distance: 200.0,
           children: [
-            ActionButton(
-              onPressed: () {},
-              icon: const Icon(Icons.create),
+            FloatingActionButton(
+              backgroundColor: Colors.red,
+              heroTag: null,
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DrawingPage(),
+                )
+              ),
+              child: const Icon(Icons.create),
             ),
-            ActionButton(
+            FloatingActionButton(
+              backgroundColor: Colors.red,
+              heroTag: null,
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => Note(database: database, type: 'note'))),
-              icon: const Icon(Icons.note_add),
+              child: const Icon(Icons.note_add),
             ),
-            ActionButton(
+            FloatingActionButton(
+              backgroundColor: Colors.red,
+              heroTag: null,
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => Note(database: database, type: 'latex'))),
-              icon: const Icon(Icons.calculate),
+              child: const Icon(Icons.calculate),
             ),
           ],
         ),

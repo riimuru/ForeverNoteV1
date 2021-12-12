@@ -42,6 +42,7 @@ class Note extends StatelessWidget {
                   title = value;
                 },
                 decoration: const InputDecoration(
+                  fillColor: Colors.yellow,
                   hintText: 'Title',
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
@@ -78,6 +79,7 @@ class Note extends StatelessWidget {
                     content = value;
                   },
                   decoration: const InputDecoration(
+                    fillColor: Colors.yellow,
                     hintText: 'Note Content',
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
