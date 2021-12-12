@@ -74,7 +74,7 @@ void main() async {
               return (theme == null ||
                       theme.isEmpty ||
                       theme == Constant.SYSTEM_DEFAULT)
-                  ? ThemeProvider(ThemeMode.system)
+                  ? ThemeProvider(ThemeMode.dark)
                   : ThemeProvider(theme == Constant.DARK
                       ? ThemeMode.dark
                       : ThemeMode.light);

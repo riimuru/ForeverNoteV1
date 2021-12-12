@@ -162,9 +162,12 @@ class _Home extends State<Home> {
                       tileColor: Colors.orange,
                     ),
                   ),
-                  Divider(
-                    color: Theme.of(context).primaryColor,
-                    height: 10,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Divider(
+                      color: Theme.of(context).primaryColor,
+                      height: 10,
+                    ),
                   ),
                 ],
               );
@@ -230,9 +233,12 @@ class _Home extends State<Home> {
                       tileColor: Colors.amber,
                     ),
                   ),
-                  Divider(
-                    color: Theme.of(context).primaryColor,
-                    height: 10,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Divider(
+                      color: Theme.of(context).primaryColor,
+                      height: 10,
+                    ),
                   ),
                 ],
               );
@@ -303,9 +309,12 @@ class _Home extends State<Home> {
                         tileColor: Colors.amber,
                       ),
                     ),
-                    Divider(
-                      color: Theme.of(context).primaryColor,
-                      height: 10,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Divider(
+                        color: Theme.of(context).primaryColor,
+                        height: 10,
+                      ),
                     ),
                   ],
                 );
@@ -371,9 +380,12 @@ class _Home extends State<Home> {
                         tileColor: Colors.amber,
                       ),
                     ),
-                    Divider(
-                      color: Theme.of(context).primaryColor,
-                      height: 10,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Divider(
+                        color: Theme.of(context).primaryColor,
+                        height: 10,
+                      ),
                     ),
                   ],
                 );
