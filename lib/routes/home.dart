@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../provider/theme_provider.dart';
+import 'package:http/http.dart' as http;
 
 import 'sub/note.dart';
 import 'sub/directory.dart';
@@ -124,7 +125,10 @@ class _Home extends State<Home> {
                       ),
                       IconButton(
                           splashRadius: 20.0,
-                          onPressed: () {
+                          onPressed: () async {
+                            var url = Uri.parse('http://localhost:3000/cloud/save');
+                            var response = await http.post(url, body: {"title": note.items[index].title, "content": note.items[index].content});
+                            //print(response);
                             Scaffold.of(context).showSnackBar(
                               SnackBar(
                                 backgroundColor: Theme.of(context).primaryColor,
