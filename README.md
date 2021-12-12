@@ -6,6 +6,34 @@
 
 <hr/>
 
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local computer for development and testing purposes.
+
+## Using Flutter SDK
+
+### Cloning
+
+```command
+git clone https://github.com/riimuru/ForeverNoteV1
+cd ForeverNoteV1
+```
+
+### Installing
+
+Install the packages and run the app.
+
+```command
+flutter pub get
+flutter run
+```
+
+## Docker
+
+TODO
+
+# App Walkthrough
+
 ## Screenshots
 
 [<img src="assets/images/screenshots/Screenshot1_light.png" width=160>](assets/screenshots/Screenshot1_light.png)
