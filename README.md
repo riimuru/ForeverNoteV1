@@ -23,11 +23,13 @@
 - Sketch/Draw
 - LaTeX
 - Search In Browser
+- Dark Mode Support
 
 ## Technologies used
 
 - [Flutter](https://docs.flutter.dev/)
 - [Dart](https://dart.dev/)
+- [http](https://dart.dev/http)
 - [flutter_tex](https://pub.dev/packages/flutter_tex)
 - [flutter_inappwebview](https://pub.dev/packages/flutter_inappwebview)
 - [flutter_downloader](https://pub.dev/packages/flutter_downloader)
