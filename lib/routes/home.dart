@@ -77,138 +77,164 @@ class _Home extends State<Home> {
           print(str2);
           if (str == '/') {
             if (str2.isEmpty) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  title: Text(note.items[index].title,
-                      style: TextStyle(color: Theme.of(context).primaryColor)),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListTile(
+                      title: Text(
+                        note.items[index].title,
+                        style: TextStyle(color: Theme.of(context).primaryColor),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
                           builder: (context) =>
-                              ViewNote(note.items[index], database))),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      IconButton(
-                        splashRadius: 20.0,
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Note(
-                                  noteStruct: note.items[index],
-                                  database: database,
-                                  type: 'latex')),
-                        ),
-                        icon: Icon(
-                          Icons.edit_outlined,
-                          color: Theme.of(context).primaryColor,
+                              ViewNote(note.items[index], database),
                         ),
                       ),
-                      IconButton(
-                        splashRadius: 20.0,
-                        onPressed: () async {
-                          await database.transaction((txn) async {
-                            await txn.rawDelete(
-                                'DELETE FROM notes WHERE id = ?',
-                                [note.items[index].id]);
-                          });
-                          note.removeNote(note.items[index]);
-                        },
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        ),
-                      ),
-                      IconButton(
-                          splashRadius: 20.0,
-                          onPressed: () async {
-                            var url = Uri.parse('http://localhost:3000/cloud/save');
-                            var response = await http.post(url, body: {"title": note.items[index].title, "content": note.items[index].content});
-                            //print(response);
-                            Scaffold.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: Theme.of(context).primaryColor,
-                                content: Text(
-                                  "Added to cloud storage.",
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          IconButton(
+                            splashRadius: 20.0,
+                            onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Note(
+                                      noteStruct: note.items[index],
+                                      database: database,
+                                      type: 'latex')),
+                            ),
+                            icon: Icon(
+                              Icons.edit_outlined,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                          IconButton(
+                            splashRadius: 20.0,
+                            onPressed: () async {
+                              await database.transaction((txn) async {
+                                await txn.rawDelete(
+                                    'DELETE FROM notes WHERE id = ?',
+                                    [note.items[index].id]);
+                              });
+                              note.removeNote(note.items[index]);
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ),
+                          IconButton(
+                              splashRadius: 20.0,
+                              onPressed: () async {
+                                var url = Uri.parse(
+                                    'http://localhost:3000/cloud/save');
+                                var response = await http.post(url, body: {
+                                  "title": note.items[index].title,
+                                  "content": note.items[index].content
+                                });
+                                //print(response);
+                                Scaffold.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor,
+                                    content: Text(
+                                      "Added to cloud storage.",
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            );
-                          },
-                          icon: Icon(
-                            Icons.cloud,
-                            color: Colors.blue[700],
-                          )),
-                    ],
+                                );
+                              },
+                              icon: Icon(
+                                Icons.cloud,
+                                color: Colors.blue[700],
+                              )),
+                        ],
+                      ),
+                      tileColor: Colors.orange,
+                    ),
                   ),
-                  tileColor: Colors.yellow,
-                ),
+                  Divider(
+                    color: Theme.of(context).primaryColor,
+                    height: 10,
+                  ),
+                ],
               );
             } else if (note.items[index].title.contains(str2)) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  title: Text(note.items[index].title,
-                      style: TextStyle(color: Theme.of(context).primaryColor)),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ViewNote(note.items[index], database))),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      IconButton(
-                        splashRadius: 20.0,
-                        onPressed: () => Navigator.push(
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListTile(
+                      title: Text(note.items[index].title,
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Note(
-                                  noteStruct: note.items[index],
-                                  database: database,
-                                  type: 'note')),
-                        ),
-                        icon: Icon(
-                          Icons.edit_outlined,
-                          color: Theme.of(context).primaryColor,
-                        ),
+                              builder: (context) =>
+                                  ViewNote(note.items[index], database))),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          IconButton(
+                            splashRadius: 20.0,
+                            onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Note(
+                                      noteStruct: note.items[index],
+                                      database: database,
+                                      type: 'note')),
+                            ),
+                            icon: Icon(
+                              Icons.edit_outlined,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                          IconButton(
+                            splashRadius: 20.0,
+                            onPressed: () async {
+                              await database.transaction((txn) async {
+                                await txn.rawDelete(
+                                    'DELETE FROM notes WHERE id = ?',
+                                    [note.items[index].id]);
+                              });
+                              note.removeNote(note.items[index]);
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ),
+                          IconButton(
+                              splashRadius: 20.0,
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.cloud,
+                                color: Colors.blue[700],
+                              )),
+                        ],
                       ),
-                      IconButton(
-                        splashRadius: 20.0,
-                        onPressed: () async {
-                          await database.transaction((txn) async {
-                            await txn.rawDelete(
-                                'DELETE FROM notes WHERE id = ?',
-                                [note.items[index].id]);
-                          });
-                          note.removeNote(note.items[index]);
-                        },
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        ),
-                      ),
-                      IconButton(
-                          splashRadius: 20.0,
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.cloud,
-                            color: Colors.blue[700],
-                          )),
-                    ],
+                      tileColor: Colors.amber,
+                    ),
                   ),
-                  tileColor: Colors.amber,
-                ),
+                  Divider(
+                    color: Theme.of(context).primaryColor,
+                    height: 10,
+                  ),
+                ],
               );
             } else {
               return const SizedBox.shrink();
@@ -216,124 +242,140 @@ class _Home extends State<Home> {
           } else {
             if (note.items[index].directory == dire) {
               if (str2.isEmpty) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    title: Text(note.items[index].title,
-                        style:
-                            TextStyle(color: Theme.of(context).primaryColor)),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ViewNote(note.items[index], database))),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        IconButton(
-                          splashRadius: 20.0,
-                          onPressed: () => Navigator.push(
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        title: Text(note.items[index].title,
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Note(
-                                    noteStruct: note.items[index],
-                                    database: database,
-                                    type: 'note')),
-                          ),
-                          icon: Icon(
-                            Icons.edit_outlined,
-                            color: Theme.of(context).primaryColor,
-                          ),
+                                builder: (context) =>
+                                    ViewNote(note.items[index], database))),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            IconButton(
+                              splashRadius: 20.0,
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Note(
+                                        noteStruct: note.items[index],
+                                        database: database,
+                                        type: 'note')),
+                              ),
+                              icon: Icon(
+                                Icons.edit_outlined,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                            IconButton(
+                              splashRadius: 20.0,
+                              onPressed: () async {
+                                await database.transaction((txn) async {
+                                  await txn.rawDelete(
+                                      'DELETE FROM notes WHERE id = ?',
+                                      [note.items[index].id]);
+                                });
+                                note.removeNote(note.items[index]);
+                              },
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              ),
+                            ),
+                            IconButton(
+                                splashRadius: 20.0,
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.cloud,
+                                  color: Colors.blue[700],
+                                )),
+                          ],
                         ),
-                        IconButton(
-                          splashRadius: 20.0,
-                          onPressed: () async {
-                            await database.transaction((txn) async {
-                              await txn.rawDelete(
-                                  'DELETE FROM notes WHERE id = ?',
-                                  [note.items[index].id]);
-                            });
-                            note.removeNote(note.items[index]);
-                          },
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          ),
-                        ),
-                        IconButton(
-                            splashRadius: 20.0,
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.cloud,
-                              color: Colors.blue[700],
-                            )),
-                      ],
+                        tileColor: Colors.amber,
+                      ),
                     ),
-                    tileColor: Colors.amber,
-                  ),
+                    Divider(
+                      color: Theme.of(context).primaryColor,
+                      height: 10,
+                    ),
+                  ],
                 );
               } else if (note.items[index].title.contains(str2)) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    title: Text(note.items[index].title,
-                        style:
-                            TextStyle(color: Theme.of(context).primaryColor)),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ViewNote(note.items[index], database))),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        IconButton(
-                          splashRadius: 20.0,
-                          onPressed: () => Navigator.push(
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        title: Text(note.items[index].title,
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Note(
-                                    noteStruct: note.items[index],
-                                    database: database,
-                                    type: 'note')),
-                          ),
-                          icon: Icon(
-                            Icons.edit_outlined,
-                            color: Theme.of(context).primaryColor,
-                          ),
+                                builder: (context) =>
+                                    ViewNote(note.items[index], database))),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            IconButton(
+                              splashRadius: 20.0,
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Note(
+                                        noteStruct: note.items[index],
+                                        database: database,
+                                        type: 'note')),
+                              ),
+                              icon: Icon(
+                                Icons.edit_outlined,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                            IconButton(
+                              splashRadius: 20.0,
+                              onPressed: () async {
+                                await database.transaction((txn) async {
+                                  await txn.rawDelete(
+                                      'DELETE FROM notes WHERE id = ?',
+                                      [note.items[index].id]);
+                                });
+                                note.removeNote(note.items[index]);
+                              },
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              ),
+                            ),
+                            IconButton(
+                                splashRadius: 20.0,
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.cloud,
+                                  color: Colors.blue[700],
+                                )),
+                          ],
                         ),
-                        IconButton(
-                          splashRadius: 20.0,
-                          onPressed: () async {
-                            await database.transaction((txn) async {
-                              await txn.rawDelete(
-                                  'DELETE FROM notes WHERE id = ?',
-                                  [note.items[index].id]);
-                            });
-                            note.removeNote(note.items[index]);
-                          },
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          ),
-                        ),
-                        IconButton(
-                            splashRadius: 20.0,
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.cloud,
-                              color: Colors.blue[700],
-                            )),
-                      ],
+                        tileColor: Colors.amber,
+                      ),
                     ),
-                    tileColor: Colors.amber,
-                  ),
+                    Divider(
+                      color: Theme.of(context).primaryColor,
+                      height: 10,
+                    ),
+                  ],
                 );
               } else {
                 return const SizedBox.shrink();
